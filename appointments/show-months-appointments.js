@@ -17,10 +17,10 @@ let getCalenderDaysBetweenDates = (startDate, endDate) => {
 function load_calendar(calender_count = 0) {
     document.getElementById('render-calendar').innerHTML = '';
 
-    const startMonth = moment().add(count, 'month').startOf('month');
-    const endMonth = moment().add(count, 'month').endOf('month');
+    const startMonth = moment().add(calender_count, 'month').startOf('month');
+    const endMonth = moment().add(calender_count, 'month').endOf('month');
 
-    const currentDateTitle = moment().add(count, 'month').startOf('month').format('MMMM YYYY');
+    const currentDateTitle = moment().add(calender_count, 'month').startOf('month').format('MMMM YYYY');
 
     let month_el = '<div class="" id="month-range-title">';
 
@@ -60,14 +60,14 @@ function load_calendar(calender_count = 0) {
     
     
 
-    var userSelection = document.getElementsByClassName('back-arrow');
+    var userSelection = document.getElementsByClassName('back-appointment-arrow');
     for(let i = 0; i < userSelection.length; i++) {
         userSelection[i].addEventListener("click", () => {
             backAppointmentCalendarNav(calender_count) 
         })
     }
 
-    var userSelection = document.getElementsByClassName('forward-arrow');
+    var userSelection = document.getElementsByClassName('forward-appointment-arrow');
     for(let i = 0; i < userSelection.length; i++) {
         userSelection[i].addEventListener("click", () => {
             forwardAppointmentCalendarNav(calender_count) 
@@ -80,13 +80,13 @@ function load_calendar(calender_count = 0) {
 function backAppointmentCalendarNav(calender_count) {
     calender_count -= 1;
     load_calendar(calender_count);
-    //add firebase api
+    //add firebase api to get all appointments
 }
 
 function forwardAppointmentCalendarNav(calender_count) {
     calender_count += 1;
     load_calendar(calender_count);
-    //add firebase api
+    //add firebase api to get all appointments
 }
 
 
