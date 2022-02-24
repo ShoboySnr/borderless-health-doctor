@@ -1,0 +1,75 @@
+<script type="text/javascript">
+        // Client ID and API key from the Developer Console
+        const CLIENT_ID = '<YOUR_CLIENT_ID>';
+        const API_KEY = 'AIzaSyDWABoNKAh9RPwqnkidmmaqCuPh4gsdkN0';
+
+        // Array of API discovery doc URLs for APIs used by the quickstart
+        var DISCOVERY_DOCS = ["https://script.googleapis.com/$discovery/rest?version=v1"];
+
+        // Authorization scopes required by the API; multiple scopes can be
+        // included, separated by spaces.
+        const SCOPES = 'https://www.googleapis.com/auth/script.projects, https://www.googleapis.com/auth/calendar';
+
+        var authorizeButton = document.getElementById('authorize_button');
+        var signoutButton = document.getElementById('signout_button');
+      
+        function handleClientLoad() {
+           gapi.client.setApiKey(API_KEY);
+           window.setTimeout(checkAuth, 1);
+        }
+
+        function checkAuth() {
+            gapi.auth.authorize({ client_id: CLIENT_ID, scope: SCOPES, immediate: true }, handleAuthResult);
+        }
+
+        let resource = {
+            "summary": "My Event",
+            "start": {
+                "dateTime": today
+            },
+            "end": {
+                "dateTime": twoHoursLater
+            },
+            "description":"We are organizing events",
+            "location":"US",
+            "attendees":[
+            {
+                "email": "attendee1@gmail.com",
+                "displayName": "Jhon",
+                "organizer": true,
+                "self": false,
+                "resource": false,
+                "optional": false,
+                "responseStatus": "needsAction",
+                "comment": "This is my demo event",
+                "additionalGuests": 3
+                    
+            },
+            {    
+                "email": "attendee2@gmail.com",
+                "displayName": "Marry",
+                "organizer": true,
+                "self": false,
+                "resource": false,
+                "optional": false,
+                "responseStatus": "needsAction",
+                "comment": "This is an official event",
+                "additionalGuests": 3
+            }
+            ],
+        };
+
+        function makeApiCall(){
+            gapi.client.load('calendar', 'v3', function () { // load the calendar api (version 3)
+                var request = gapi.client.calendar.events.insert
+                ({
+                    'calendarId': '24tn4fht2tr6m86efdiqqlsedk@group.calendar.google.com', 
+                    // calendar ID which id of Google Calendar where you are creating events. this can be copied from your Google Calendar user view.
+                    "resource": resource 	// above resource will be passed here
+                });                
+            }
+ </script>
+ <script async defer src="https://apis.google.com/js/api.js"
+ onload="this.onload=function(){};handleClientLoad()"
+ onreadystatechange="if (this.readyState === 'complete') this.onload()">
+</script>

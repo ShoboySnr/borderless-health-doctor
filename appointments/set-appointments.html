@@ -1,0 +1,67 @@
+<script>
+
+function setAppointment() {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.getElementById("failed-message").style.display = 'none';
+    document.getElementById("success-message").style.display= 'none';
+
+    const loader = document.querySelector('#loader');
+
+    //load screen
+    loader.setAttribute('style', 'display: flex;');
+
+    //read current 
+    const docRef = db.collection("test-appointments");
+
+    docRef.get().then((doc) => {
+        if(doc.exists) {
+            console.log("Document data:", doc.data());
+        } else {
+            console.log("No such document!");
+        }
+    }).then((error) => {
+        console.error("Error getting document:", error);
+    })
+
+    let data = {
+        "calender_id": calender_id,
+        "date": date,
+        "doctor_uid": doctor_uid,
+        "meeting_url": meeting_url,
+        "patient_background_info": patient_background_info,
+        "patient_documents": patient_documents,
+        "patient_uid": patient_uid,
+        "status": status,
+        "time": time,
+    };
+
+    return;
+
+
+    db.collection("test-doctors").add(data)
+    .then(() => {
+        const success_message = 'Successfully updated your appointments';
+        
+        //show success message
+        let success_message_el = document.getElementById("success-message");
+        success_message_el.innerHTML = success_message;
+        success_message_el.style.display = "block";
+        loader.setAttribute('style', 'display: none;');
+    }).catch((error) => {
+        let error_message = error.message;
+        let failed_message_el = document.getElementById("failed-message");
+        failed_message_el.innerHTML = error_message;
+        failed_message_el.style.display = "block";
+        loader.setAttribute('style', 'display: none;');
+        return;
+    })
+}
+    
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('wf-form-set-appoitment-Form').addEventListener('submit', setAppointment, true);   
+});
+</script>

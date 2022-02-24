@@ -1,0 +1,151 @@
+<script>
+
+function addDoctor(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.getElementById("failed-message").style.display = 'none';
+    document.getElementById("success-message").style.display= 'none';
+
+    const loader = document.querySelector('#loader');
+
+    //load screen
+    loader.setAttribute('style', 'display: flex;');
+
+    let formData = new FormData(this);
+    let firstName = formData.get('first-name');
+    let lastName = formData.get('last-name');
+    let email = formData.get('email');
+    let phoneNumber = formData.get('phone-number');
+    let gender = formData.get('gender');
+    let password = formData.get('password');
+    let speciality = formData.get('speciality');
+    let language = formData.get('language');
+    let gmcNumber = formData.get('gmc-number');
+    let experience = formData.get('experience');
+    let bio = formData.get('bio');
+
+
+    let errMsg = '';
+    let errCount = 0;
+
+    if(firstName === '') {
+        errMsg += '<p>First Name cannot be empty </p>';
+        errCount++;
+    }
+
+    if(lastName === '') {
+        errMsg += '<p>Last Name cannot be empty </p>';
+        errCount++;
+    }
+
+    if(email === '') {
+        errMsg += '<p>Email cannot be empty </p>';
+        errCount++;
+    }
+
+    if(phoneNumber === '') {
+        errMsg += '<p>Phone Number cannot be empty </p>';
+        errCount++;
+    }
+
+    if(gender === '') {
+        errMsg += '<p>Gender cannot be empty </p>';
+        errCount++;
+    }
+
+    if(password === '') {
+        errMsg += '<p>Password cannot be empty </p>';
+        errCount++;
+    }
+
+    if(speciality === '') {
+        errMsg += '<p>Speciality cannot be empty </p>';
+        errCount++;
+    }
+
+    if(language === '') {
+        errMsg += '<p>Language cannot be empty </p>';
+        errCount++;
+    }
+
+    if(gmcNumber === '') {
+        errMsg += '<p>GMC Number cannot be empty </p>';
+        errCount++;
+    }
+
+    if(experience === '') {
+        errMsg += '<p>Number of Experience cannot be empty </p>';
+        errCount++;
+    }
+
+
+    if(errCount > 0) {
+        document.getElementById("failed-message").style.display = 'block';
+        document.getElementById("failed-message").innerHTML = errMsg;
+        return;
+    }
+
+    speciality = speciality.split(',')
+
+    let data = {
+        "firstname": firstName,
+        "lastname": lastName,
+        "gmc_number": gmcNumber,
+        "language": language,
+        "phone_number": phoneNumber,
+        "years_of_experience": parseInt(experience),
+        "gender": gender, 
+        "speciality": speciality,
+        "bio": bio
+    }
+
+    const _this = this;
+
+    auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredentials) => {
+        data.doctor_uid = userCredentials.user.uid;
+        db.collection("test-doctors").add(data)
+        .then(() => {
+                userCredentials.user.sendEmailVerification().then(function() {
+                _this.reset();
+                const success_message = 'Successfully created a Doctor and Verification email has been sent to the Doctor';
+                
+                //show success message
+                let success_message_el = document.getElementById("success-message");
+                success_message_el.innerHTML = success_message;
+                success_message_el.style.display = "block";
+                loader.setAttribute('style', 'display: none;');
+
+                return userCredentials;
+            }).catch(function(error) {
+                let failed_message_el = document.getElementById("failed-message");
+                failed_message_el.innerHTML = error.message;
+                failed_message_el.style.display = "block";
+                console.error("Error writing document: ", error);
+                loader.setAttribute('style', 'display: none;');
+            });
+           
+        })
+        .catch((error) => {
+            let failed_message_el = document.getElementById("failed-message");
+            failed_message_el.innerHTML = error.message;
+            failed_message_el.style.display = "block";
+            console.error("Error writing document: ", error);
+            loader.setAttribute('style', 'display: none;');
+        });
+    }).catch((error) => {
+        let error_message = error.message;
+        let failed_message_el = document.getElementById("failed-message");
+        failed_message_el.innerHTML = error_message;
+        failed_message_el.style.display = "block";
+        loader.setAttribute('style', 'display: none;');
+        return;
+    });
+}
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('wf-form-doctor-Form').addEventListener('submit', addDoctor, true);   
+});
+</script>

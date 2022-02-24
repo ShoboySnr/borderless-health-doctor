@@ -1,0 +1,88 @@
+let getCalenderDaysBetweenDates = (startDate, endDate) => {
+    var now = startDate.clone(), dates = [];
+
+    while (now.isSameOrBefore(endDate)) {
+        const year = now.format('YYYY');
+        const month = now.format('MMMM');
+        const days = now.format('DD');
+        const shortday = now.format('ddd')
+        const find_date = {year, month, days, shortday}
+
+        dates.push(find_date);
+        now.add(1, 'days');
+    }
+    return dates;
+};
+
+function load_calendar(count = 0) {
+    document.getElementById('render-calendar').innerHTML = '';
+
+    const startMonth = moment().add(count, 'month').startOf('month');
+    const endMonth = moment().add(count, 'month').endOf('month');
+
+    const currentDateTitle = moment().add(count, 'month').startOf('month').format('MMMM YYYY');
+
+    let month_el = '<div class="" id="month-range-title">';
+
+    month_el += '<img loading="lazy" src="https://uploads-ssl.webflow.com/61bb14ca2605dbf57ee956a0/61f26eca58147e810b931de3_arrow-left.png" alt="">' +
+                '<div class="month-title">' + currentDateTitle + '</div>';
+                '<img loading="lazy" src="https://uploads-ssl.webflow.com/61bb14ca2605dbf57ee956a0/61c0571f3cf2261928eac70d_Vector.png" alt="">';
+    
+    month_el += '</div>';
+
+    let dateList = getDaysBetweenDates(startMonth, endMonth);
+
+    let calendar = [];
+
+    const date_ranges = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
+
+    month_el += '<div class="div-block-16 month-title">';
+
+    date_ranges.forEach((element, index) => {
+        month_el += '<div class="text-block-7">' + element + '</div>';
+    });
+
+    month_el = '</div>';
+
+    dateList.forEach((date_el, date_index) => {
+        month_el += '<div class="div-block-15 week-range">'
+        date_ranges.forEach((element, index) => {
+            let is_not_active = '';
+            if(date_el.shortday !== element) {
+                month_el += '<div class="div-block-14 blank-cell"></div>';
+            } else {
+                month_el += '<div class="div-block-14"><div class="text-block-6">' + date_el.days + '</div></div>';
+            }
+        });
+        month_el += '</div>';
+    });
+
+    
+    
+
+    var userSelection = document.getElementsByClassName('back-arrow');
+    for(let i = 0; i < userSelection.length; i++) {
+        userSelection[i].addEventListener("click", () => {
+            backCalendarNav() 
+        })
+    }
+
+    var userSelection = document.getElementsByClassName('forward-arrow');
+    for(let i = 0; i < userSelection.length; i++) {
+        userSelection[i].addEventListener("click", () => {
+            NextCalendarNav() 
+        })
+    }
+
+    document.getElementById('render-calendar').innerHTML = month_el;
+}
+
+function backCalendarNav() {
+
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    load_calendar();
+    // getAppointments();
+});

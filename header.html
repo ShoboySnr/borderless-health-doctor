@@ -1,0 +1,60 @@
+<style>
+#loadingScreen {
+    display: flex;
+}
+
+.appointment-card {
+        filter: drop-shadow(0px 7px 4px rgba(0, 0, 0, 0.05)); 
+}
+
+.appointment-container {
+    min-width: calc(100% + 122px);
+}
+
+.appointment-date-container {
+    max-width: 122px;
+}
+
+.previous-appointment .appointment-date-container,
+.previous-appointment .appointment-date-container > div {
+    background-color: #f2f2f2 !important;
+}
+
+.previous-appointment .appointment-date-container h1, 
+.previous-appointment .appointment-date-container p {
+    color: #333333 !important;
+}
+
+.hide {
+    display: none;
+}
+
+.w-icon-arrow-down:before, .w-icon-dropdown-toggle:before {
+    color: #ffffff;
+}
+
+#triggerAppointmentModal {
+    display: none;
+    box-shadow: none !important;
+}
+
+.jquery-modal.blocker {
+    padding: 5%;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#triggerAppointmentModal a.close-modal {
+    top: 15px !important;
+    right: 15px !important;
+}
+
+.appointment-calendar-container-inner {
+    display: none;
+}
+
+.open-calender-active {
+    display: block !important;
+}
+    
+
+</style>

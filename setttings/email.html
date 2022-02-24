@@ -1,0 +1,113 @@
+<script>
+
+ let current_user;
+
+function getProfile() {
+    auth
+    .onAuthStateChanged((user) => {
+        if(user) {
+            current_user = user;
+            const displayName = user.displayName;
+            const email = user.email;
+            const photoURL = user.photoURL;
+            const emailVerified = user.emailVerified;
+
+
+            document.getElementById('settings-user-email').textContent = email;
+
+
+        } else {
+             // user not logged in, redirect user to login page
+            alert('Please login to continue')
+            window.location.href='/login';
+        }
+    });
+}
+
+function processUpdateEmail(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const current_password = document.getElementById('current-password').value;
+    const new_email = document.getElementById('new-email-address').value;
+
+    const prev_email = current_user.email;
+
+    const error_message_el = document.getElementById('error-message');
+    const success_message_el = document.getElementById('success-message');
+    const loader = document.getElementById('loader');
+
+    let errorMsg = '';
+    let errorCount = 0;
+    error_message_el.setAttribute('style', 'display: none');
+    success_message_el.setAttribute('style', 'display: none');
+
+    if(new_email == '' ) {
+        errorCount += 1;
+        errorMsg += '<p>Email cannot be empty</p>';
+    }
+
+    if(current_password === '') {
+        errorCount += 1;
+        errorMsg += '<p>Password cannot be empty</p>';
+    }
+
+    if(!validateEmail(new_email)) {
+        errorCount += 1;
+        errorMsg += '<p>Please enter the correct email address</p>';
+    }
+
+    if(new_email === prev_email) {
+        errorCount += 1;
+        errorMsg += '<p>Previous email and new email are the same</p>';
+    }
+
+
+    if(errorCount > 0) {
+        loader.setAttribute('style', 'display: none;');
+        error_message_el.setAttribute('style', 'display: block');
+        error_message_el.innerHTML = '<div>' + errorMsg + '</div>';
+        return;
+    }
+
+    //sign in again the user
+    auth.signInWithEmailAndPassword(prev_email, current_password)
+    .then((userCredentials) => {
+        const user = firebase.auth().currentUser;
+        user.updateEmail(new_email).then(() => {
+            loader.setAttribute('style', 'display: none;');
+            success_message_el.setAttribute('style', 'display: block');
+            success_message_el.innerHTML = '<div>Email update was successful.</div>';
+
+            //logout the user after change
+            setTimeout(() => {
+                userSignOut(auth);
+            }, 2000)
+        }).catch((error) => {
+            let errorCode = error.code;
+            let errorMessage = error.message;
+            loader.setAttribute('style', 'display: none;');
+            error_message_el.setAttribute('style', 'display: block');
+            error_message_el.innerHTML = '<div>' + errorMessage + '</div>';
+            return;
+        })
+
+    }).catch((error) => {
+        console.log(error);
+        // user not logged in, redirect user to login page
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        loader.setAttribute('style', 'display: none;');
+        error_message_el.setAttribute('style', 'display: block');
+        error_message_el.innerHTML = '<div>Incorrect credentials</div>';
+        return;
+    })
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    getProfile();
+
+    document.getElementById('email-update-form').addEventListener('submit', processUpdateEmail, true)
+})
+</script>

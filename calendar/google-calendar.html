@@ -1,0 +1,85 @@
+
+<script type="text/javascript" src="http://www.google.com/jsapi?key=AIzaSyA_JeVf8NXgchADEUXyXUdTtoYVHYQmlwE"></script>
+<script>
+
+let clientId = '768856761081-ovk0q2b2hcm7gdb0vkohsngp99apu0q4.apps.googleusercontent.com';
+let apiKey = 'AIzaSyA_JeVf8NXgchADEUXyXUdTtoYVHYQmlwE';
+
+
+let scopes = 'https://www.googleapis.com/auth/calendar';
+
+
+function handleClientLoad() {
+    gapi.client.setApiKey(apiKey);
+    window.setTimeout(checkAuth, 1);
+    checkAuth();   
+}
+
+function authresult(authResult) {
+    console.log(authResult)
+}
+
+
+function checkAuth() {
+    gapi.auth.authorize({ client_id: clientId, scope: scopes, immediate: true }, authresult); 
+}
+
+let start = getRelativeDate(1, 12);
+
+let end = getRelativeDate(1, 13);
+
+function getRelativeDate(daysOffset, hour) {
+var date = new Date();
+date.setDate(date.getDate() + daysOffset);
+date.setHours(hour);
+date.setMinutes(0);
+date.setSeconds(0);
+date.setMilliseconds(0);
+return date;
+}
+
+let events = {
+    "summary": 'Meeting 1',
+    "location": 'Online',
+    "description": 'This is meeting',
+    "start": {
+        "dateTime": start.toISOString()
+    },
+    "end": {
+        "dateTime": end.toISOString()
+    },
+    "attendees": [
+        {
+            "email": 'oluwadamilareshobowale@gmail.com',
+            "displayName":"Damilare",
+            "organizer": true,
+            "self": false,
+            "resource":false,
+            "optional":false,
+            "responseStatus":"needsAction",
+            "comment":"This is my demo event",
+            "additionalGuests":3
+        },
+        {
+            "email": 'des.olanrewaju@gmail.com',
+            "displayName": "Desmond",
+            "organizer":true,
+            "self":false,
+            "resource":false,
+            "optional":false,
+            "responseStatus":"needsAction",
+            "comment":"This is an official event",
+            "additionalGuests":3
+        }
+    ],
+    conferenceData: {
+            "createRequest": {
+            "conferenceSolutionKey": {
+                "type": "hangoutsMeet"
+            },
+            "requestId": "some-random-string"
+            }
+        },
+}
+</script>
+<script src="https://apis.google.com/js/client.js?onload=handleClientLoad" type="text/javascript"></script>

@@ -1,0 +1,55 @@
+<script>
+
+function login_with_firebase(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const errorMsg = document.getElementById('error-msg')
+    const userName = document.getElementById('userName');
+    const userAvatar = document.getElementById('userAvatar');
+    const loader = document.querySelector('#loader');
+    
+    const username = document.querySelector('#field-email').value;
+    const password = document.querySelector('#field-password').value;
+    
+    //load screen
+    loader.setAttribute('style', 'display: flex;');
+
+    //reset error
+    errorMsg.setAttribute('style', 'display: none;');
+    errorMsg.innerHTML = '';
+    
+    auth.signInWithEmailAndPassword(username, password)
+    .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+
+    console.log(userCredential);
+
+    if(userName) {
+        userName.innerHTML = user.displayName;
+    }
+
+    if(user.photoURL) {
+        userAvatar.src = user.photoURL;
+    }
+    loader.setAttribute('style', 'display: none;');
+    location.href ='/appointments/all';
+
+    })
+    .catch((error) => {
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        // ..
+        loader.setAttribute('style', 'display: none;');
+        errorMsg.setAttribute('style', 'display: block');
+        errorMsg.innerHTML = '<div>' + errorMessage + '</div>';
+
+    });  
+    return;
+}
+
+
+document.getElementById('wf-form-Doctor-Login').addEventListener('submit', login_with_firebase, true)
+</script>
