@@ -48,8 +48,8 @@ function load_calendar(calender_count = 0) {
         month_el += '<div class="div-block-15 week-range">'
         date_ranges.forEach((element, index) => {
             let is_not_active = '';
-            console.log(date_el, element);
-            if(date_el.shortday !== element) {
+            console.log(date_el.showdays, element);
+            if(date_el.showdays !== element) {
                 month_el += '<div class="div-block-14 blank-cell"></div>';
             } else {
                 month_el += '<div class="div-block-14"><div class="text-block-6">' + date_el.days + '</div></div>';
