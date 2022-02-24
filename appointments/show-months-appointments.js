@@ -42,20 +42,23 @@ function load_calendar(calender_count = 0) {
         month_el += '<div class="text-block-7">' + element + '</div>';
     });
 
-    month_el = '</div>';
+    month_el += '</div>';
 
-    date_ranges.forEach((element, index) => {
-        dateList.forEach((date_el, date_index) => {
-            console.log(date_el.showdays, element);
-            if(date_el.showdays !== element) {
-                month_el += '<div class="div-block-14 blank-cell"></div>';
-            } else {
-                month_el += '<div class="div-block-14"><div class="text-block-6">' + date_el.days + '</div></div>';
-            }
-        });
-    });
 
-    
+    for (let i = 0; i < dateList.length; i++) {
+        let count = 0;
+
+        if (count == 0) {
+            month_el += '<div class="div-block-15">';
+        }
+
+        month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].shortday + '</div></div>';
+
+        if(count == 6) {
+            month_el += '<div class="div-block-15">';
+            count = 0;
+        } else count++;
+    }
     
 
     var userSelection = document.getElementsByClassName('back-appointment-arrow');
