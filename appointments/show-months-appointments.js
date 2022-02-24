@@ -25,7 +25,7 @@ function load_calendar(calender_count = 0) {
     let month_el = '<div class="month-range-title" id="month-range-title">';
 
     month_el += '<img loading="lazy" src="https://uploads-ssl.webflow.com/61bb14ca2605dbf57ee956a0/61f26eca58147e810b931de3_arrow-left.png" alt="">' +
-                '<div class="month-title">' + currentDateTitle + '</div>';
+                '<div class="month-title">' + currentDateTitle + '</div>' +
                 '<img loading="lazy" src="https://uploads-ssl.webflow.com/61bb14ca2605dbf57ee956a0/61c0571f3cf2261928eac70d_Vector.png" alt="">';
     
     month_el += '</div>';
