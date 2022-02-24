@@ -44,10 +44,8 @@ function load_calendar(calender_count = 0) {
 
     month_el = '</div>';
 
-    dateList.forEach((date_el, date_index) => {
-        month_el += '<div class="div-block-15 week-range">'
-        date_ranges.forEach((element, index) => {
-            let is_not_active = '';
+    date_ranges.forEach((element, index) => {
+        dateList.forEach((date_el, date_index) => {
             console.log(date_el.showdays, element);
             if(date_el.showdays !== element) {
                 month_el += '<div class="div-block-14 blank-cell"></div>';
@@ -55,7 +53,6 @@ function load_calendar(calender_count = 0) {
                 month_el += '<div class="div-block-14"><div class="text-block-6">' + date_el.days + '</div></div>';
             }
         });
-        month_el += '</div>';
     });
 
     
