@@ -48,6 +48,7 @@ function load_calendar(calender_count = 0) {
         month_el += '<div class="div-block-15 week-range">'
         date_ranges.forEach((element, index) => {
             let is_not_active = '';
+            console.log(date_el.shortday, element);
             if(date_el.shortday !== element) {
                 month_el += '<div class="div-block-14 blank-cell"></div>';
             } else {
