@@ -14,7 +14,7 @@ let getCalenderDaysBetweenDates = (startDate, endDate) => {
     return dates;
 };
 
-function load_calendar(count = 0) {
+function load_calendar(calender_count = 0) {
     document.getElementById('render-calendar').innerHTML = '';
 
     const startMonth = moment().add(count, 'month').startOf('month');
@@ -63,26 +63,34 @@ function load_calendar(count = 0) {
     var userSelection = document.getElementsByClassName('back-arrow');
     for(let i = 0; i < userSelection.length; i++) {
         userSelection[i].addEventListener("click", () => {
-            backCalendarNav() 
+            backAppointmentCalendarNav(calender_count) 
         })
     }
 
     var userSelection = document.getElementsByClassName('forward-arrow');
     for(let i = 0; i < userSelection.length; i++) {
         userSelection[i].addEventListener("click", () => {
-            NextCalendarNav() 
+            forwardAppointmentCalendarNav(calender_count) 
         })
     }
 
     document.getElementById('render-calendar').innerHTML = month_el;
 }
 
-function backCalendarNav() {
+function backAppointmentCalendarNav(calender_count) {
+    calender_count -= 1;
+    load_calendar(calender_count);
+    //add firebase api
+}
 
+function forwardAppointmentCalendarNav(calender_count) {
+    calender_count += 1;
+    load_calendar(calender_count);
+    //add firebase api
 }
 
 
 document.addEventListener('DOMContentLoaded', function() {
     load_calendar();
-    // getAppointments();
+    // firebase api to get appointment
 });
