@@ -22,7 +22,7 @@ function load_calendar(calender_count = 0) {
 
     const currentDateTitle = moment().add(calender_count, 'month').startOf('month').format('MMMM YYYY');
 
-    let month_el = '<div class="" id="month-range-title">';
+    let month_el = '<div class="month-range-title" id="month-range-title">';
 
     month_el += '<img loading="lazy" src="https://uploads-ssl.webflow.com/61bb14ca2605dbf57ee956a0/61f26eca58147e810b931de3_arrow-left.png" alt="">' +
                 '<div class="month-title">' + currentDateTitle + '</div>';
