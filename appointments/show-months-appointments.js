@@ -52,11 +52,9 @@ function load_calendar(calender_count = 0) {
 
         console.log(date_ranges[count],  dateList[i].shortday);
 
-        if(date_ranges[count] == dateList[i].shortday) {
-            month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
-        } else {
-            month_el += '<div class="div-block-14 blank-cell"></div>';
-        }
+        month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
+            
+        // month_el += '<div class="div-block-14 blank-cell"></div>';
 
         if(count == 6) {
 
