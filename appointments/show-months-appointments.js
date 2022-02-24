@@ -30,7 +30,7 @@ function load_calendar(calender_count = 0) {
     
     month_el += '</div>';
 
-    let dateList = getDaysBetweenDates(startMonth, endMonth);
+    let dateList = getCalenderDaysBetweenDates(startMonth, endMonth);
 
     let calendar = [];
 
@@ -46,8 +46,6 @@ function load_calendar(calender_count = 0) {
 
     let count = 0;
     for (let i = 0; i < dateList.length; i++) {
-        console.log(dateList[i]);
-
         if (count == 0) {
             month_el += '<div class="div-block-15">';
         }
