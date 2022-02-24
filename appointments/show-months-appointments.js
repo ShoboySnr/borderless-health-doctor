@@ -4,7 +4,7 @@ let getCalenderDaysBetweenDates = (startDate, endDate) => {
     while (now.isSameOrBefore(endDate)) {
         const year = now.format('YYYY');
         const month = now.format('MMMM');
-        const days = now.format('DD');
+        const days = now.format('D');
         const shortday = now.format('ddd')
         const find_date = {year, month, days, shortday}
 
@@ -50,7 +50,11 @@ function load_calendar(calender_count = 0) {
             month_el += '<div class="div-block-15">';
         }
 
-        month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
+        if(date_ranges[count] == dateList[i].shortday) {
+            month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
+        } else {
+            month_el += '<div class"div-block-14 blank-cell"></div>';
+        }
 
         if(count == 6) {
 
