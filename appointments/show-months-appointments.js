@@ -44,9 +44,9 @@ function load_calendar(calender_count = 0) {
 
     month_el += '</div>';
 
-
+    let count = 0;
     for (let i = 0; i < dateList.length; i++) {
-        let count = 0;
+        console.log(dateList[i]);
 
         if (count == 0) {
             month_el += '<div class="div-block-15">';
@@ -55,7 +55,7 @@ function load_calendar(calender_count = 0) {
         month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].shortday + '</div></div>';
 
         if(count == 6) {
-            
+
             month_el += '</div>';
             count = 0;
         } else count++;
