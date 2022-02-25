@@ -103,6 +103,8 @@ function load_calendar(calender_count = 0) {
 
     }
 
+    document.getElementById('render-calendar').innerHTML = month_el;
+
     let userBackAppointmentSelection = document.querySelectorAll('back-appointment-arrow');
     for(let i = 0; i < userBackAppointmentSelection.length; i++) {
         console.log(i)
@@ -117,8 +119,6 @@ function load_calendar(calender_count = 0) {
             forwardAppointmentCalendarNav(calender_count) 
         })
     }
-
-    document.getElementById('render-calendar').innerHTML = month_el;
 }
 
 function backAppointmentCalendarNav(calender_count) {
