@@ -59,8 +59,10 @@ function load_calendar(calender_count = 0) {
         has_prev_month = true;
 
         for(let i = 0; i < empty_start_dates_count; i++) {
-            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count + 1, 'days').format('D');
-            append_prev_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + prev_date + '</div></div>';
+            const prev_days = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count + 1, 'days')
+            const prev_date = prev_date.format('D');
+            const format_prev_date = prev_date.format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
+            append_prev_month_el += '<div class="div-block-14 blank-cell" data-current-date="' + format_prev_date + '"><div class="text-block-6">' + prev_date + '</div></div>';
         }
     }
 
@@ -73,8 +75,8 @@ function load_calendar(calender_count = 0) {
             console.log(i, date_ranges.length)
             const next_days = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count, 'days');
             const next_date = next_days.format('D');
-            const format_date = next_days.format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
-            append_end_month_el += '<div class="div-block-14 blank-cell" data-current-date="' + format_date + '"><div class="text-block-6">' + next_date + '</div></div>';
+            const format_next_date = next_days.format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
+            append_end_month_el += '<div class="div-block-14 blank-cell" data-current-date="' + format_next_date + '"><div class="text-block-6">' + next_date + '</div></div>';
         }
     }
 
@@ -90,7 +92,10 @@ function load_calendar(calender_count = 0) {
             has_prev_month = false;
         }
 
-        month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
+
+        const format_current_date = moment(`${dateList[i].days} ${dateList[i].month} ${dateList[i].year}`, "D MMMM YYYY").format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
+
+        month_el += '<div class="div-block-14" data-current-date="' + format_current_date + '"><div class="text-block-6">' + dateList[i].days + '</div></div>';
 
         if(i == dateList.length - 1) {
             if(has_end_month) {
@@ -159,6 +164,7 @@ function getAllBookedAppointments() {
                         if(doc.exists) {
                             const data_collected = doc.data();
                             const { patient_uid } = data_collected;
+                            console.log('hello', patient_uid, data_collected);
 
                             // get the patients collection
                             db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
@@ -194,7 +200,7 @@ function getAllBookedAppointments() {
         const { patient_uid } = appointment;
         console.log(date, patient_uid);
 
-        const get_selected_date = document.querySelector('div[data-current-date="' + date + '"]');
+        const get_selected_date = document.querySelector('div[data-current-date="' + date.toString() + '"]');
 
         if(get_selected_date) {
             get_selected_date.setAttribute('style', 'background-color: #27AE60;color: white;');
