@@ -38,7 +38,7 @@ function load_calendar(calender_count = 0) {
 
     month_el += '<div class="div-block-24"><div class="div-block-17">';
 
-    month_el += '<div class="div-block-16 month-title">';
+    month_el += '<div class="div-block-16">';
 
     date_ranges.forEach((element, index) => {
         month_el += '<div class="text-block-7">' + element + '</div>';
