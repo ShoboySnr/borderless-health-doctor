@@ -51,17 +51,14 @@ function load_calendar(calender_count = 0) {
 
     let endDate = endMonth.format('ddd');
     const empty_end_dates_count = date_ranges.indexOf(endDate);
-    console.log(empty_end_dates_count);
-
-    console.log(empty_start_dates_count, empty_end_dates_count);
 
     let append_prev_month_el = '';
     let has_prev_month = false;
     if(empty_start_dates_count > 0) {
         has_prev_month = true;
 
-        for(let i = empty_start_dates_count; i > 0; i--) {
-            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count, 'days').format('D');
+        for(let i = empty_start_dates_count; i >= 0; i--) {
+            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(empty_start_dates_count - i, 'days').format('D');
             append_prev_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + prev_date + '</div></div>';
         }
     }
@@ -72,7 +69,7 @@ function load_calendar(calender_count = 0) {
         has_end_month = true;
 
         for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
-            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i, 'days').format('D');
+            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i - 1, 'days').format('D');
             append_end_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + next_date + '</div></div>';
         }
     }
@@ -88,8 +85,6 @@ function load_calendar(calender_count = 0) {
             count += empty_start_dates_count;
             has_prev_month = false;
         }
-
-        console.log(date_ranges[count],  dateList[i].shortday);
 
         month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
 
