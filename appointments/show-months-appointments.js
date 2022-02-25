@@ -61,7 +61,7 @@ function load_calendar(calender_count = 0) {
         for(let i = 0; i < empty_start_dates_count; i++) {
             const prev_days = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count + 1, 'days')
             const prev_date = prev_days.format('D');
-            const format_prev_date = prev_days.format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
+            const format_prev_date = prev_days.format("MMMM D, YYYY [at] h:mm:ss A [UTC]ZZ");
             append_prev_month_el += '<div class="div-block-14 blank-cell" data-current-date="' + format_prev_date + '"><div class="text-block-6">' + prev_date + '</div></div>';
         }
     }
@@ -75,7 +75,7 @@ function load_calendar(calender_count = 0) {
             console.log(i, date_ranges.length)
             const next_days = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count, 'days');
             const next_date = next_days.format('D');
-            const format_next_date = next_days.format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
+            const format_next_date = next_days.format("MMMM D, YYYY [at] h:mm:ss A [UTC]ZZ");
             append_end_month_el += '<div class="div-block-14 blank-cell" data-current-date="' + format_next_date + '"><div class="text-block-6">' + next_date + '</div></div>';
         }
     }
@@ -93,7 +93,7 @@ function load_calendar(calender_count = 0) {
         }
 
 
-        const format_current_date = moment(`${dateList[i].days} ${dateList[i].month} ${dateList[i].year}`, "D MMMM YYYY").format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
+        const format_current_date = moment(`${dateList[i].days} ${dateList[i].month} ${dateList[i].year}`, "D MMMM YYYY").format("MMMM D, YYYY [at] h:mm:ss A [UTC]ZZ");
 
         month_el += '<div class="div-block-14" data-current-date="' + format_current_date + '"><div class="text-block-6">' + dateList[i].days + '</div></div>';
 
