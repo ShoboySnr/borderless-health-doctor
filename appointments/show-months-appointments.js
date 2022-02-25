@@ -57,7 +57,7 @@ function load_calendar(calender_count = 0) {
     if(empty_start_dates_count > 0) {
         has_prev_month = true;
 
-        for(let i = empty_start_dates_count; i > 0; i--) {
+        for(let i = date_ranges.length; i > empty_start_dates_count; i--) {
             const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(empty_start_dates_count - i, 'days').format('D');
             append_prev_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + prev_date + '</div></div>';
         }
@@ -141,6 +141,7 @@ function getAllBookedAppointments() {
 
     inner_page_loader.setAttribute('style', 'display:flex');
 
+    appointments = [];
 
 }
 
