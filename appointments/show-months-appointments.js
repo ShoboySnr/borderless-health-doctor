@@ -179,6 +179,22 @@ function getAllBookedAppointments() {
                     });
                 }
 
+                console.log(appointments);
+
+                appointments.forEach((appointment, index) => {
+                    const { date } = appointment;
+                    const { patient_uid } = appointment;
+            
+                    const get_selected_date = document.querySelector('div[data-current-date="' + date.toString() + '"]');
+                    console.log(appointment, get_selected_date);
+            
+                    if(get_selected_date) {
+                        get_selected_date.setAttribute('style', 'background-color: #27AE60;color: white;');
+                        const url = '/appointments/appointment?id=' + patient_uid;
+                        document.querySelector('div[data-current-date="' + date + '"] div').innerHTML += '<a href="' + url + '" style="height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;" >Booked</a>';
+                    }
+                })
+
             }).catch((error) => {
                 console.log(error);
                 inner_page_loader.setAttribute('style', 'display:none');
@@ -189,22 +205,6 @@ function getAllBookedAppointments() {
             window.location.href = '/login';
         }
     });
-
-    console.log(appointments);
-
-    appointments.forEach((appointment, index) => {
-        const { date } = appointment;
-        const { patient_uid } = appointment;
-
-        const get_selected_date = document.querySelector('div[data-current-date="' + date.toString() + '"]');
-        console.log(appointment, get_selected_date);
-
-        if(get_selected_date) {
-            get_selected_date.setAttribute('style', 'background-color: #27AE60;color: white;');
-            const url = '/appointments/appointment?id=' + patient_uid;
-            document.querySelector('div[data-current-date="' + date + '"] div').innerHTML += '<a href="' + url + '" style="height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;" >Booked</a>';
-        }
-    })
 }
 
 
