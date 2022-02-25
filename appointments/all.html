@@ -1,365 +1,188 @@
 <script>
-"use strict";
-let getDaysBetweenDates = (startDate, endDate) => {
-    var now = startDate.clone(), dates = [];
-
-    while (now.isSameOrBefore(endDate)) {
-        const year = now.format('YYYY');
-        const month = now.format('MMM');
-        const days = now.format('DD');
-        const showdays = now.format('ddd')
-        const find_date = {year, month, days, showdays}
-
-        dates.push(find_date);
-        now.add(1, 'days');
-    }
-    return dates;
-};
-
-let getTimeBetweenDates = (startTime, endTime) => {
-    var now = startTime.clone(), dates = [];
-
-    while (now.isBefore(endTime)) {
-        dates.push(now.format('hh:mm A'));
-        now.add(30, 'minutes');
-    }
-    return dates;
-};
-
-const chunk = (arr, size) => arr.reduce((acc, e, i) => (i % size ? acc[acc.length - 1].push(e) : acc.push([e]), acc), []);
-
-const load_custom_calender_dates = (count = 0) => {
-    const startDate = moment().add(-2 + count, 'days');
-    const endDate = moment().add(5 + count, 'days');
-
-    let dateList = getDaysBetweenDates(startDate, endDate);
-
-    let chunkDateList = chunk(dateList, 7); 
-
-    let returnDate = [];
-
-    chunkDateList.forEach((element, count) => {
-        let first_item = element[0];
-        let last_item = element[element.length - 1];
-        let concat_first_item = first_item['year'] + first_item['month'] + first_item['days'];
-        let concat_last_item = last_item['year'] + last_item['month'] + last_item['days'];
-        let first_item_date = moment(concat_first_item, 'YYYYMMMDD').format('MMMM Do');
-        let last_item_date = moment(concat_last_item, 'YYYYMMMDD').format('MMMM Do YYYY');
-
-        let is_active = false;
-        if(moment(first_item['year'] + first_item['month'] + first_item['days'], 'YYYYMMMDD').isBefore(moment(), 'day') &&  moment(last_item['year'] + last_item['month'] + last_item['days'], 'YYYYMMMDD').isSameOrAfter(moment(), 'day')) is_active = true;
-        let groupDate = {
-            'start_date' : first_item_date,
-            'end_date'   : last_item_date,
-            'data'       : element,
-            'active'     : is_active,
-        };
-
-        returnDate.push(groupDate);
-    });
-
-    return returnDate;
-}
-
-const load_custom_calendar_time = () => {
-    const startTime = moment('00:00', 'HH::mm');
-    const endTime = moment('24:00', 'HH::mm');
-
-    let timeList = getTimeBetweenDates(startTime, endTime);
-
-    let returnDate = [];
+    "use strict";
+    let getDaysBetweenDates = (startDate, endDate) => {
+        var now = startDate.clone(), dates = [];
     
-    timeList.forEach((element, count) => {
-        let start_time = moment(element, 'HH:mm A');
-        let end_time = moment(element, 'HH:mm A').add(30, 'minutes');
-
-        let is_active = false;
-        if(moment(start_time).isBefore(moment()) &&  moment(end_time).isAfter(moment())) is_active = true;
-
-        let groupTime = {
-            'data'       : element,
-            'active'     : is_active
-        };
-
-        returnDate.push(groupTime)
-    });
-
-    return returnDate;
-}
-
-const generate_columns_time = (current_time, active_time, current_value = []) => {
-    let is_active = active_time ? 'current-active-time' : '';
-    let append_html = '<div class="container-8 w-container ' + is_active + '">'
-    for(let i = 0; i < 7; i++) {
-        append_html += i == 0 ? '<div class="text-block-9"><strong>' + current_time + '</strong></div>' : '<div class="div-block-28 appointment-calendar-date">' +
-                    '<input type="text" class="appointment-day w-input" maxlength="256" name="appointments[]" data-name="appointments[]" placeholder="" id="field">' +
-                    '<label class="field-label"></label>' +
-                    '</div>';
-
-    }
-
-    append_html += '</div>'
-
-    return append_html;
-}
-
-const generate_calendar_table_html = (current_dates, calendar_title, active_date, count, current_value = []) => {
-    let current_active_date = active_date ? ' open-calender-active' : ''
-    let append_html = '<div class="appointment-calendar-container-inner calendar-' + count + current_active_date +'" data-cal="' + count +'">';
-    append_html += '<div class="container-7 w-container">' + 
-                        '<div class="columns-6 w-row"><div class="column-8 w-col w-col-4">' + 
-                        '<img data-cal="'+count+'" src="https://uploads-ssl.webflow.com/61bb14ca2605dbf57ee956a0/61f26eca58147e810b931de3_arrow-left.png" loading="lazy" alt="" class="back-arrow">' + 
-                        '</div>' + 
-                        '<div class="column-10 w-col w-col-4">' + 
-                        '<p class="paragraph-7">' + calendar_title + '</p>' +
-                        '</div>' + 
-                        '<div class="column-9 w-col w-col-4">' + 
-                        '<img data-cal="'+count+'" src="https://uploads-ssl.webflow.com/61bb14ca2605dbf57ee956a0/61c0571f3cf2261928eac70d_Vector.png" loading="lazy" alt="" class="image-4 forward-arrow"></div></div></div>';
-    append_html += '<div class="container-8 w-container">';
-    append_html += '<div class="div-block-21"></div>';
-    current_dates.forEach((element, index) => {
-        const date_selected = moment(`${element.month} ${element.days}, ${element.year}`, "MMMM D, YYYY").unix();
-        append_html += '<div class="text-block-8 date-appointment select-appointment-' + index +'" data-current-month-time="' + date_selected + '"><span style="text-transform: uppercase">' + element.month  + '</span><br><strong class="bold-text">' + element.days +'</strong><br>'+ element.showdays +'</div>';
-    })
-
-    append_html += '</div>'
-    append_html += '</div>'
-
-    return append_html;
-}
-
-function backCalendarNav (calender_count) {
-    calender_count -= 7;
-    load_dates_html(calender_count);
-    getAllSetAppointments();
-
-    let next_cal_el = document.querySelectorAll('.appointment-calendar-container-inner');
-    //append open-calender-active
-    next_cal_el[0].classList.add("open-calender-active");
-}
-
-function NextCalendarNav (calender_count) {
-    calender_count += 7;
-    load_dates_html(calender_count);
-    getAllSetAppointments();
-
-    let next_cal_el = document.querySelectorAll('.appointment-calendar-container-inner');
-    //append open-calender-active
-    next_cal_el[0].classList.add("open-calender-active");
-}
-
-function load_dates_html(calender_count = 0) {
-    const loader = document.querySelector('#loader');
-    //load screen
-    loader.setAttribute('style', 'display: flex;');
-
-    let load_dates = load_custom_calender_dates(calender_count);
-    const month_el = document.getElementById('show-month-range');
-    month_el.innerHTML = '';
-    for (let i = 0; i < load_dates.length; i++) {
-        let calender_title = load_dates[i].start_date + ' - ' + load_dates[i].end_date;
-        month_el.innerHTML += generate_calendar_table_html(load_dates[i].data, calender_title, load_dates[i].active, i)
-    }
-
-    var userSelection = document.getElementsByClassName('back-arrow');
-    for(let i = 0; i < userSelection.length; i++) {
-        userSelection[i].addEventListener("click", () => {
-            backCalendarNav(calender_count) 
-            })
-    }
-
-    var userSelection = document.getElementsByClassName('forward-arrow');
-    for(let i = 0; i < userSelection.length; i++) {
-        userSelection[i].addEventListener("click", () => {
-            NextCalendarNav(calender_count) 
-        })
-    }
-
-    loader.setAttribute('style', 'display: none;');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    load_dates_html();
-    getAppointments();
-});
-
-function getAppointments() {
-    const inner_page_loader = document.querySelector('#upcoming-events .inner-loader-class');
-    const upcoming_appointment_info = document.getElementById('upcoming-appointment-info');
-
-    inner_page_loader.setAttribute('style', 'display:flex');
-    upcoming_appointment_info.setAttribute('style', 'display:none');
-
-    let appointments = []
-
-    function populate(index, firstname, lastname, profile_image, id) {
-        var original = document.getElementsByClassName('appointment-container')[0];
-        var clone = original.cloneNode(true); // "deep" clone
-        original.parentNode.appendChild(clone);
-        const image = document.querySelectorAll('.appointment-container img')[index];
-        const fullname = document.querySelectorAll('.appointment-container .heading-5')[index];
-        const link = document.querySelectorAll('.appointment-container a')[index];
-        image.src = profile_image;
-        link.href = '/appointments/appointment?ap=' + id
-        fullname.innerHTML = firstname + " " + lastname;
-    }
-
-    const testRef = db.collection('test-appointments');
-    testRef.get().then((snapshot) => {
-        let index = 0
-        snapshot.forEach((doc) => {
-            const appointmenDoc = db.collection('test-patients').doc(doc.data().patient_uid)
-            appointmenDoc.get().then((appointmentSnapshot) => {
-                appointments.push({ id: doc.id, ...doc.data(), ...appointmentSnapshot.data() })
-                const currentAppointment = { id: doc.id, ...doc.data(), ...appointmentSnapshot.data() }
-                populate(index, currentAppointment.firstname, currentAppointment.lastname, currentAppointment.profile_image, currentAppointment.id);
-                index++;
-            })
+        while (now.isSameOrBefore(endDate)) {
+            const year = now.format('YYYY');
+            const month = now.format('MMM');
+            const days = now.format('DD');
+            const showdays = now.format('ddd')
+            const find_date = {year, month, days, showdays}
+    
+            dates.push(find_date);
+            now.add(1, 'days');
+        }
+        return dates;
+    };
+    
+    let getTimeBetweenDates = (startTime, endTime) => {
+        var now = startTime.clone(), dates = [];
+    
+        while (now.isBefore(endTime)) {
+            dates.push(now.format('hh:mm A'));
+            now.add(30, 'minutes');
+        }
+        return dates;
+    };
+    
+    const chunk = (arr, size) => arr.reduce((acc, e, i) => (i % size ? acc[acc.length - 1].push(e) : acc.push([e]), acc), []);
+    
+    const load_custom_calender_dates = (count = 0) => {
+        const startDate = moment().add(-2 + count, 'days');
+        const endDate = moment().add(5 + count, 'days');
+    
+        let dateList = getDaysBetweenDates(startDate, endDate);
+    
+        let chunkDateList = chunk(dateList, 7); 
+    
+        let returnDate = [];
+    
+        chunkDateList.forEach((element, count) => {
+            let first_item = element[0];
+            let last_item = element[element.length - 1];
+            let concat_first_item = first_item['year'] + first_item['month'] + first_item['days'];
+            let concat_last_item = last_item['year'] + last_item['month'] + last_item['days'];
+            let first_item_date = moment(concat_first_item, 'YYYYMMMDD').format('MMMM Do');
+            let last_item_date = moment(concat_last_item, 'YYYYMMMDD').format('MMMM Do YYYY');
+    
+            let is_active = false;
+            if(moment(first_item['year'] + first_item['month'] + first_item['days'], 'YYYYMMMDD').isBefore(moment(), 'day') &&  moment(last_item['year'] + last_item['month'] + last_item['days'], 'YYYYMMMDD').isSameOrAfter(moment(), 'day')) is_active = true;
+            let groupDate = {
+                'start_date' : first_item_date,
+                'end_date'   : last_item_date,
+                'data'       : element,
+                'active'     : is_active,
+            };
+    
+            returnDate.push(groupDate);
         });
-        upcoming_appointment_info.setAttribute('style', 'display:block');
-        inner_page_loader.setAttribute('style', 'display: none');
-
-    }).catch((error) => {
-        console.log(error);
-        inner_page_loader.setAttribute('style', 'display: none');
-    })
-}
-
-
-function getAppointments() {
-  const inner_page_loader = document.querySelector(
-    "#upcoming-events .inner-loader-class"
-  );
-  const upcoming_appointment_info = document.getElementById(
-    "upcoming-appointment-info"
-  );
-
-  inner_page_loader.setAttribute("style", "display:flex");
-  upcoming_appointment_info.setAttribute("style", "display:none");
-
-  let appointments = [];
-
-  function populate() {
-    var original = document.getElementsByClassName("appointment-container")[0];
-    original.setAttribute("style", "display:flex");
-    const previousAppointmentsParent = document.querySelector(
-      ".previous-appointment-info"
-    );
-    const currentDate = new Date();
-
-    const upcomingAppointments = appointments.filter(
-      (ap) => ap.date.toDate() > currentDate
-    );
-    const previousAppointments = appointments.filter(
-      (ap) => ap.date.toDate() < currentDate
-    );
-    console.log("upcomingAppointments", upcomingAppointments);
-    console.log("previousAppointments", previousAppointments);
-
-    if (upcomingAppointments.length === 0) {
-      const emptyAppointment = document.querySelector(
-        ".upcoming-appointment .no-appointments"
-      );
-      emptyAppointment.setAttribute("style", "display:block");
+    
+        return returnDate;
     }
-    if (previousAppointments.length === 0) {
-      const emptyAppointment = document.querySelector(
-        ".previous-appointment .no-appointments"
-      );
-      emptyAppointment.setAttribute("style", "display:block");
-    }
-    upcomingAppointments.forEach((appointment, index) => {
-      upcoming_appointment_info.setAttribute("style", "display:block");
-      if (index > 0) {
-        var clone = original.cloneNode(true); // "deep" clone
-        original.parentNode.appendChild(clone);
-      }
-      const image = document.querySelectorAll(".upcoming-appointment .appointment-container img")[
-        index
-      ];
-      const fullname = document.querySelectorAll(
-        ".appointment-container .heading-5"
-      )[index];
-      const day = document.querySelectorAll(".upcoming-appointment .appointment-container .day")[
-        index
-      ];
-      const month = document.querySelectorAll(".upcoming-appointment .appointment-container .month")[
-        index
-      ];
-      const link = document.querySelectorAll(".upcoming-appointment .appointment-container a")[index];
-      image.src = appointment.profile_image;
-      month.innerHTML = appointment.date.toDate().toString().substring(4, 7);
-      day.innerHTML = appointment.date.toDate().toString().substring(8, 10);
-      link.href = "/appointments/appointment?ap=" + appointment.id;
-      fullname.innerHTML = appointment.firstname + " " + appointment.lastname;
-    });
-    previousAppointments.forEach((appointment, index) => {
-      console.log("appointment", appointment);
-      var clone = original.cloneNode(true); // "deep" clone
-      previousAppointmentsParent.appendChild(clone);
-
-      const image = document.querySelectorAll(".previous-appointment .appointment-container img")[
-        index
-      ];
-      const fullname = document.querySelectorAll(
-        ".appointment-container .heading-5"
-      )[index];
-      const day = document.querySelectorAll(".previous-appointment .appointment-container .day")[
-        index
-      ];
-      const month = document.querySelectorAll(".previous-appointment .appointment-container .month")[
-        index
-      ];
-      const link = document.querySelectorAll(".previous-appointment .appointment-container a")[index];
-      image.src = appointment.profile_image;
-      month.innerHTML = appointment.date.toDate().toString().substring(4, 7);
-      day.innerHTML = appointment.date.toDate().toString().substring(8, 10);
-      link.href = "/appointments/appointment?ap=" + appointment.id;
-      fullname.innerHTML = appointment.firstname + " " + appointment.lastname;
-    });
-  }
-
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      let appointmentRef = db
-        .collection("test-appointments")
-        .where("patient_uid", "!=", null);
-      appointmentRef = appointmentRef.where("doctor_uid", "==", user.uid);
-      appointmentRef
-        .get()
-        .then((snapshot) => {
-          let index = 0;
-          snapshot.forEach((doc) => {
-            const appointmenDoc = db
-              .collection("test-patients")
-              .doc(doc.data().patient_uid);
-            appointmenDoc.get().then((appointmentSnapshot) => {
-              appointments.push({
-                id: doc.id,
-                ...doc.data(),
-                ...appointmentSnapshot.data(),
-              });
-              console.log(
-                "to date sunbstr",
-                doc.data().date.toDate().toString()
-              );
-              if (snapshot.size === index + 1) {
-                populate();
-              }
-              index++;
-            });
-          });
-          inner_page_loader.setAttribute("style", "display: none");
-        })
-        .catch((error) => {
-          console.log(error);
-          inner_page_loader.setAttribute("style", "display: none");
+    
+    const load_custom_calendar_time = () => {
+        const startTime = moment('00:00', 'HH::mm');
+        const endTime = moment('24:00', 'HH::mm');
+    
+        let timeList = getTimeBetweenDates(startTime, endTime);
+    
+        let returnDate = [];
+        
+        timeList.forEach((element, count) => {
+            let start_time = moment(element, 'HH:mm A');
+            let end_time = moment(element, 'HH:mm A').add(30, 'minutes');
+    
+            let is_active = false;
+            if(moment(start_time).isBefore(moment()) &&  moment(end_time).isAfter(moment())) is_active = true;
+    
+            let groupTime = {
+                'data'       : element,
+                'active'     : is_active
+            };
+    
+            returnDate.push(groupTime)
         });
+    
+        return returnDate;
     }
-  });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  getAppointments();
-});
-</script>
+    
+    const generate_columns_time = (current_time, active_time, current_value = []) => {
+        let is_active = active_time ? 'current-active-time' : '';
+        let append_html = '<div class="container-8 w-container ' + is_active + '">'
+        for(let i = 0; i < 7; i++) {
+            append_html += i == 0 ? '<div class="text-block-9"><strong>' + current_time + '</strong></div>' : '<div class="div-block-28 appointment-calendar-date">' +
+                        '<input type="text" class="appointment-day w-input" maxlength="256" name="appointments[]" data-name="appointments[]" placeholder="" id="field">' +
+                        '<label class="field-label"></label>' +
+                        '</div>';
+    
+        }
+    
+        append_html += '</div>'
+    
+        return append_html;
+    }
+    
+    const generate_calendar_table_html = (current_dates, calendar_title, active_date, count, current_value = []) => {
+        let current_active_date = active_date ? ' open-calender-active' : ''
+        let append_html = '<div class="appointment-calendar-container-inner calendar-' + count + current_active_date +'" data-cal="' + count +'">';
+        append_html += '<div class="container-7 w-container">' + 
+                            '<div class="columns-6 w-row"><div class="column-8 w-col w-col-4">' + 
+                            '<img data-cal="'+count+'" src="https://uploads-ssl.webflow.com/61bb14ca2605dbf57ee956a0/61f26eca58147e810b931de3_arrow-left.png" loading="lazy" alt="" class="back-arrow">' + 
+                            '</div>' + 
+                            '<div class="column-10 w-col w-col-4">' + 
+                            '<p class="paragraph-7">' + calendar_title + '</p>' +
+                            '</div>' + 
+                            '<div class="column-9 w-col w-col-4">' + 
+                            '<img data-cal="'+count+'" src="https://uploads-ssl.webflow.com/61bb14ca2605dbf57ee956a0/61c0571f3cf2261928eac70d_Vector.png" loading="lazy" alt="" class="image-4 forward-arrow"></div></div></div>';
+        append_html += '<div class="container-8 w-container">';
+        append_html += '<div class="div-block-21"></div>';
+        current_dates.forEach((element, index) => {
+            const date_selected = moment(`${element.month} ${element.days}, ${element.year}`, "MMMM D, YYYY").unix();
+            append_html += '<div class="text-block-8 date-appointment select-appointment-' + index +'" data-current-month-time="' + date_selected + '"><span style="text-transform: uppercase">' + element.month  + '</span><br><strong class="bold-text">' + element.days +'</strong><br>'+ element.showdays +'</div>';
+        })
+    
+        append_html += '</div>'
+        append_html += '</div>'
+    
+        return append_html;
+    }
+    
+    function backCalendarNav (calender_count) {
+        calender_count -= 7;
+        load_dates_html(calender_count);
+        getAllSetAppointments();
+    
+        let next_cal_el = document.querySelectorAll('.appointment-calendar-container-inner');
+        //append open-calender-active
+        next_cal_el[0].classList.add("open-calender-active");
+    }
+    
+    function NextCalendarNav (calender_count) {
+        calender_count += 7;
+        load_dates_html(calender_count);
+        getAllSetAppointments();
+    
+        let next_cal_el = document.querySelectorAll('.appointment-calendar-container-inner');
+        //append open-calender-active
+        next_cal_el[0].classList.add("open-calender-active");
+    }
+    
+    function load_dates_html(calender_count = 0) {
+        const loader = document.querySelector('#loader');
+        //load screen
+        loader.setAttribute('style', 'display: flex;');
+    
+        let load_dates = load_custom_calender_dates(calender_count);
+        const month_el = document.getElementById('show-month-range');
+        month_el.innerHTML = '';
+        for (let i = 0; i < load_dates.length; i++) {
+            let calender_title = load_dates[i].start_date + ' - ' + load_dates[i].end_date;
+            month_el.innerHTML += generate_calendar_table_html(load_dates[i].data, calender_title, load_dates[i].active, i)
+        }
+    
+        var userSelection = document.getElementsByClassName('back-arrow');
+        for(let i = 0; i < userSelection.length; i++) {
+            userSelection[i].addEventListener("click", () => {
+                backCalendarNav(calender_count) 
+                })
+        }
+    
+        var userSelection = document.getElementsByClassName('forward-arrow');
+        for(let i = 0; i < userSelection.length; i++) {
+            userSelection[i].addEventListener("click", () => {
+                NextCalendarNav(calender_count) 
+            })
+        }
+    
+        loader.setAttribute('style', 'display: none;');
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        load_dates_html();
+    });
+    
+    </script>
+    <script src="https://studio14.github.io/borderless-health-frontend/all-appointments.js">
+    </script>
+    <script src="https://shoboysnr.github.io/borderless-health-doctor/appointments/show-months-appointments.js" type="text/javascript"></script>
