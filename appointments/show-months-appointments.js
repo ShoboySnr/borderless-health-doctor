@@ -71,7 +71,7 @@ function load_calendar(calender_count = 0) {
 
         for(let i = empty_end_dates_count; i < date_ranges.length - 1; i++) {
             console.log(i, date_ranges.length)
-            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i, 'days').format('D');
+            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count, 'days').format('D');
             append_end_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + next_date + '</div></div>';
         }
     }
