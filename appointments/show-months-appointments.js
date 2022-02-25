@@ -150,7 +150,7 @@ function getAllBookedAppointments() {
     auth.onAuthStateChanged((user) => {
         if(user) {
             const doctor_uid = user.uid;
-            let appointmentRef = db.collection('test-appointments').where('doctor_uid', '==', doctor_uid).where('patient_uid', '!=', null);
+            let appointmentRef = db.collection('test-appointments').where('doctor_uid', '==', doctor_uid).where('patient_uid', '!=', '');
             appointmentRef.get().then((querySnapshot) => {
                 if(!querySnapshot.empty) {
                     querySnapshot.forEach((doc) => {
@@ -158,28 +158,29 @@ function getAllBookedAppointments() {
                             const data_collected = doc.data();
                             const { patient_uid } = data_collected;
 
-                            // get the patients collection
-                            db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
-                                const patients_doc_collected = patientSnapshot.data();
+                            if(patient_uid !== '') {
+                                // get the patients collection
+                                db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
+                                    const patients_doc_collected = patientSnapshot.data();
 
-                                const { date } = data_collected;
-                                const { patient_uid } = data_collected;
+                                    const { date } = data_collected;
+                                    const { patient_uid } = data_collected;
 
-                                const get_selected_date = document.querySelector('div[data-current-date="' + date.seconds.toString() + '"]');
-                        
-                                if(get_selected_date) {
-                                    get_selected_date.setAttribute('style', 'background-color: #27AE60;color: white;');
-                                    const url = '/appointments/appointment?ap=' + doc.id;
-                                    const text_el = `${patients_doc_collected.firstname} ${patients_doc_collected.lastname}`
-                                    get_selected_date.innerHTML += '<a href="' + url + '" style="position:absolute;top:0;height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;color:#fff;" >' + text_el +'</a>';
-                                }
+                                    const get_selected_date = document.querySelector('div[data-current-date="' + date.seconds.toString() + '"]');
+                            
+                                    if(get_selected_date) {
+                                        get_selected_date.setAttribute('style', 'background-color: #27AE60;color: white;');
+                                        const url = '/appointments/appointment?ap=' + doc.id;
+                                        const text_el = `${patients_doc_collected.firstname} ${patients_doc_collected.lastname}`
+                                        get_selected_date.innerHTML += '<a href="' + url + '" style="position:absolute;top:0;height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;color:#fff;" >' + text_el +'</a>';
+                                    }
 
-                                inner_page_loader.setAttribute('style', 'display:none');
-                            }).catch((error) => {
-                                console.log(error);
-                                inner_page_loader.setAttribute('style', 'display:none');
-                            })
-
+                                    inner_page_loader.setAttribute('style', 'display:none');
+                                }).catch((error) => {
+                                    console.log(error);
+                                    inner_page_loader.setAttribute('style', 'display:none');
+                                })
+                            }
                         }
                     });
                 }
