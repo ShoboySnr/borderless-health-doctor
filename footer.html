@@ -195,7 +195,7 @@ function set_date_time_appointment(index, event) {
    }
 
    const split_time_selected = time_selected.split('-');
-   const date_selected = moment(`${month_selected} ${days_selected}, ${year_selected} ${split_time_selected[0]}`, "MMMM D, YYYY h:m:s A").format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
+   const date_selected = moment(`${month_selected} ${days_selected}, ${year_selected} ${split_time_selected[0]}`, "MMMM D, YYYY h:m:s A").format("MMMM D, YYYY [at] h:mm:ss A [UTC]ZZ");
 
    auth.onAuthStateChanged((user) => {
     let currentPath = window.location.pathname;

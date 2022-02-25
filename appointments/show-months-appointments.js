@@ -93,7 +93,7 @@ function load_calendar(calender_count = 0) {
         }
 
 
-        const format_current_date = moment(`${dateList[i].days} ${dateList[i].month} ${dateList[i].year}`, "D MMMM YYYY").format("MMMM D, YYYY [at] h:mm:ss A [UTC]ZZ");
+        const format_current_date = moment(`${dateList[i].days} ${dateList[i].month} ${dateList[i].year}`, "D MMMM YYYY").format("MMMM D, YYYY [at] h:mm:ss A [UTC]z");
 
         month_el += '<div class="div-block-14" data-current-date="' + format_current_date + '"><div class="text-block-6">' + dateList[i].days + '</div></div>';
 
