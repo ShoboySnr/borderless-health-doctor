@@ -167,7 +167,6 @@ function getAllBookedAppointments() {
 
                             // get the patients collection
                             db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
-                                console.log('hello', patientSnapshot.data());
                                 const patients_doc_collected = patientSnapshot.data();
                                 appointments.push({
                                     id: doc.id,
@@ -175,7 +174,7 @@ function getAllBookedAppointments() {
                                     ...patients_doc_collected
                                 });
                                 inner_page_loader.setAttribute('style', 'display:none');
-                            }).then((error) => {
+                            }).catch((error) => {
                                 console.log(error);
                                 inner_page_loader.setAttribute('style', 'display:none');
                             })
@@ -184,7 +183,7 @@ function getAllBookedAppointments() {
                     });
                 }
 
-            }).then((error) => {
+            }).catch((error) => {
                 console.log(error);
                 inner_page_loader.setAttribute('style', 'display:none');
             })
@@ -194,6 +193,8 @@ function getAllBookedAppointments() {
             window.location.href = '/login';
         }
     });
+
+    console.log(appointments);
 
     appointments.forEach((appointment, index) => {
         const { date } = appointment;
