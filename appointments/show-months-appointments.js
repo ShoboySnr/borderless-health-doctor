@@ -167,7 +167,7 @@ function getAllBookedAppointments() {
 
                             // get the patients collection
                             db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
-                                console.log('hello', patientSnapshot);
+                                console.log('hello', patientSnapshot.data());
                                 const patients_doc_collected = patientSnapshot.data();
                                 appointments.push({
                                     id: doc.id,
