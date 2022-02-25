@@ -44,6 +44,14 @@ function load_calendar(calender_count = 0) {
 
     month_el += '</div>';
 
+    let startDate = startMonth.format(ddd);
+    const empty_start_dates_count = Array.indexOf(startDate);
+
+    let endDate = endMonth.format(ddd);
+    const empty_end_dates_count = Array.indexOf(endDate);
+
+    console.log(empty_start_dates_count, empty_end_dates_count);
+
     let count = 0;
     for (let i = 0; i < dateList.length; i++) {
         if (count == 0) {
@@ -57,6 +65,7 @@ function load_calendar(calender_count = 0) {
         // month_el += '<div class="div-block-14 blank-cell"></div>';
 
         if(count == 6) {
+
 
             month_el += '</div>';
             count = 0;
