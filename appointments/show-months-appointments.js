@@ -133,13 +133,13 @@ function load_calendar(calender_count = 0) {
 function backAppointmentCalendarNav(calender_count) {
     calender_count -= 1;
     load_calendar(calender_count);
-    //add firebase api to get all appointments
+    getAllBookedAppointments();
 }
 
 function forwardAppointmentCalendarNav(calender_count) {
     calender_count += 1;
     load_calendar(calender_count);
-    //add firebase api to get all appointments
+    getAllBookedAppointments();
 }
 
 function getAllBookedAppointments() {
