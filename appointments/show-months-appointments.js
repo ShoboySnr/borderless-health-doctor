@@ -58,7 +58,8 @@ function load_calendar(calender_count = 0) {
         has_prev_month = true;
 
         for(let i = 0; i < empty_start_dates_count; i++) {
-            append_prev_month_el += '<div class="div-block-14 blank-cell"></div>';
+            const prev_date = moment().add(calender_count, 'month').add(i - empty_start_dates_count, 'days').format('ddd');
+            append_prev_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + prev_date + '</div></div>';
         }
     }
 
