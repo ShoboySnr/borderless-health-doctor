@@ -58,7 +58,7 @@ function load_calendar(calender_count = 0) {
         has_prev_month = true;
 
         for(let i = 0; i < empty_start_dates_count; i++) {
-            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(i, 'days').format('D');
+            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count, 'days').format('D');
             append_prev_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + prev_date + '</div></div>';
         }
     }
@@ -143,8 +143,19 @@ function getAllBookedAppointments() {
 
     appointments = [];
 
+    auth.onAuthStateChanged((user) => {
+        if(user) {
+            const doctor_uid = user.uid;
+            let appointmentRef = d.collection('test-appointments').where('doctor_uid', '==', doctor_uid);
+            appointmentRef.get().then(() => {
 
+            })
 
+        } else {
+            alert('Please login to proceed');
+            window.location.href = '/login';
+        }
+    });
 }
 
 
