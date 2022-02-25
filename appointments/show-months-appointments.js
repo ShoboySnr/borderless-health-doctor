@@ -71,8 +71,10 @@ function load_calendar(calender_count = 0) {
 
         for(let i = empty_end_dates_count; i < date_ranges.length - 1; i++) {
             console.log(i, date_ranges.length)
-            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count, 'days').format('D');
-            append_end_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + next_date + '</div></div>';
+            const next_days = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count, 'days');
+            const next_date = next_days.format('D');
+            const format_date = next_days.format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
+            append_end_month_el += '<div class="div-block-14 blank-cell" data-current-date="' + format_date + '"><div class="text-block-6">' + next_date + '</div></div>';
         }
     }
 
@@ -188,6 +190,20 @@ function getAllBookedAppointments() {
             window.location.href = '/login';
         }
     });
+
+    appointments.forEach((appointment, index) => {
+        const { date } = appointment;
+        const { patient_uid } = appointment;
+        console.log(date, patient_uid);
+
+        const get_selected_date = document.querySelector('div[data-current-date="' + date + '"]');
+
+        if(get_selected_date) {
+            get_selected_date.setAttribute('style', 'background-color: #27AE60;color: white;');
+            const url = '/appointments/appointment?id=' + patient_uid;
+            document.querySelector('div[data-current-date="' + date + '"] div').innerHTML += '<a href="' + url + '" style="height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;" >Booked</a>';
+        }
+    })
 }
 
 
