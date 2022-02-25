@@ -34,7 +34,7 @@ function load_calendar(calender_count = 0) {
 
     let calendar = [];
 
-    const date_ranges = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
+    const date_ranges = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     month_el += '<div class="div-block-24"><div class="div-block-17">';
 
@@ -69,7 +69,7 @@ function load_calendar(calender_count = 0) {
     if(empty_end_dates_count > -1) {
         has_end_month = true;
 
-        for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
+        for(let i = empty_end_dates_count; i < date_ranges.length - 1; i++) {
             console.log(i, date_ranges.length)
             const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i, 'days').format('D');
             append_end_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + next_date + '</div></div>';
