@@ -60,7 +60,7 @@ function load_calendar(calender_count = 0) {
         has_prev_month = true;
 
         for(let i = 0; i < empty_start_dates_count; i++) {
-            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count, 'days').format('D');
+            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(0 - i, 'days').format('D');
             append_prev_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + prev_date + '</div></div>';
         }
     }
@@ -71,7 +71,8 @@ function load_calendar(calender_count = 0) {
         has_end_month = true;
 
         for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
-            append_end_month_el += '<div class="div-block-14 blank-cell"></div>';
+            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i, 'days').format('D');
+            append_end_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + next_date + '</div></div>';
         }
     }
 
@@ -94,6 +95,7 @@ function load_calendar(calender_count = 0) {
         if(i == dateList.length - 1) {
             if(has_end_month) {
                 month_el += append_end_month_el;
+                count += empty_end_dates_count;
                 has_end_month = false;
             }
         }
