@@ -60,7 +60,7 @@ function load_calendar(calender_count = 0) {
 
         for(let i = 0; i < empty_start_dates_count; i++) {
             const prev_days = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count + 1, 'days')
-            const prev_date = prev_date.format('D');
+            const prev_date = prev_days.format('D');
             const format_prev_date = prev_date.format("MMMM D, YYYY [at] h:mm:ss A [UTC]Z");
             append_prev_month_el += '<div class="div-block-14 blank-cell" data-current-date="' + format_prev_date + '"><div class="text-block-6">' + prev_date + '</div></div>';
         }
