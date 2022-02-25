@@ -50,6 +50,7 @@ function load_calendar(calender_count = 0) {
     const empty_start_dates_count = date_ranges.indexOf(startDate);
 
     let endDate = endMonth.format('ddd');
+    console.log(endDate);
     const empty_end_dates_count = date_ranges.indexOf(endDate);
 
     let append_prev_month_el = '';
