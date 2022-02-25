@@ -201,7 +201,7 @@ function getAllBookedAppointments() {
         const { patient_uid } = appointment;
 
         const get_selected_date = document.querySelector('div[data-current-date*="' + date.toString() + '"]');
-        console.log(get_selected_date);
+        console.log(appointment, get_selected_date);
 
         if(get_selected_date) {
             get_selected_date.setAttribute('style', 'background-color: #27AE60;color: white;');
