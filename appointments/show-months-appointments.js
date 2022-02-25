@@ -52,6 +52,11 @@ function load_calendar(calender_count = 0) {
 
     console.log(empty_start_dates_count, empty_end_dates_count);
 
+    
+    for(let i = 0; i < empty_start_dates_count; i++) {
+        month_el += '<div class="div-block-14 blank-cell"></div>';
+    }
+
     let count = 0;
     for (let i = 0; i < dateList.length; i++) {
         if (count == 0) {
@@ -60,31 +65,27 @@ function load_calendar(calender_count = 0) {
 
         console.log(date_ranges[count],  dateList[i].shortday);
 
-        if(count <= empty_start_dates_count || count > empty_end_dates_count) {
-            month_el += '<div class="div-block-14 blank-cell"></div>';
-        } else {
-            month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
-        }
-            
-        // month_el += '<div class="div-block-14 blank-cell"></div>';
+        month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
 
         if(count == 6) {
-
-
             month_el += '</div>';
             count = 0;
         } else count++;
     }
+
+    for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
+        month_el += '<div class="div-block-14 blank-cell"></div>';
+    }
     
 
-    var userSelection = document.getElementsByClassName('back-appointment-arrow');
+    var userSelection = document.querySelectorAll('back-appointment-arrow');
     for(let i = 0; i < userSelection.length; i++) {
         userSelection[i].addEventListener("click", () => {
             backAppointmentCalendarNav(calender_count) 
         })
     }
 
-    var userSelection = document.getElementsByClassName('forward-appointment-arrow');
+    var userSelection = document.querySelectorAll('forward-appointment-arrow');
     for(let i = 0; i < userSelection.length; i++) {
         userSelection[i].addEventListener("click", () => {
             forwardAppointmentCalendarNav(calender_count) 
