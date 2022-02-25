@@ -44,6 +44,8 @@ function load_calendar(calender_count = 0) {
 
     month_el += '</div>';
 
+    month_el = '<div class="div-block-24"><div class="div-block-17">';
+
     let startDate = startMonth.format('ddd');
     const empty_start_dates_count = date_ranges.indexOf(startDate);
 
@@ -102,6 +104,8 @@ function load_calendar(calender_count = 0) {
 
 
     }
+
+    month_el += '</div></div>';
 
     document.getElementById('render-calendar').innerHTML = month_el;
 
