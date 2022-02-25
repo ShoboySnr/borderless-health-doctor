@@ -52,9 +52,24 @@ function load_calendar(calender_count = 0) {
 
     console.log(empty_start_dates_count, empty_end_dates_count);
 
-    
-    for(let i = 0; i < empty_start_dates_count; i++) {
-        month_el += '<div class="div-block-14 blank-cell"></div>';
+    let append_prev_month_el = '';
+    let has_prev_month = false;
+    if(empty_start_dates_count > 0) {
+        has_prev_month = true;
+
+        for(let i = 0; i < empty_start_dates_count; i++) {
+            append_prev_month_el += '<div class="div-block-14 blank-cell"></div>';
+        }
+    }
+
+    let append_end_month_el = '';
+    let has_end_month = false;
+    if(empty_end_dates_count > 0) {
+        has_end_month = true;
+
+        for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
+            append_end_month_el += '<div class="div-block-14 blank-cell"></div>';
+        }
     }
 
     let count = 0;
@@ -63,14 +78,28 @@ function load_calendar(calender_count = 0) {
             month_el += '<div class="div-block-15">';
         }
 
+        if(has_prev_month) {
+            month_el += append_prev_month_el;
+            has_prev_month = false;
+        }
+
         console.log(date_ranges[count],  dateList[i].shortday);
 
         month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
+
+        if(i == dateList.length - 1) {
+            if(has_end_month) {
+                month_el += append_end_month_el;
+                has_end_month = false;
+            }
+        }
 
         if(count == 6) {
             month_el += '</div>';
             count = 0;
         } else count++;
+
+
     }
 
     for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
