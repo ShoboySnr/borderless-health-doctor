@@ -58,7 +58,7 @@ function load_calendar(calender_count = 0) {
         has_prev_month = true;
 
         for(let i = 0; i < empty_start_dates_count; i++) {
-            const prev_date = moment().add(calender_count, 'month').add(i - empty_start_dates_count, 'days').format('ddd');
+            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count, 'days').format('D');
             append_prev_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + prev_date + '</div></div>';
         }
     }
@@ -95,7 +95,7 @@ function load_calendar(calender_count = 0) {
             }
         }
 
-        if(count >= 6) {
+        if(count >= (6 - empty_start_dates_count)) {
             month_el += '</div>';
             count = 0;
         } else count++;
