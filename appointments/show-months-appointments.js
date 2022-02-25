@@ -45,10 +45,10 @@ function load_calendar(calender_count = 0) {
     month_el += '</div>';
 
     let startDate = startMonth.format('ddd');
-    const empty_start_dates_count = Array.indexOf(startDate);
+    const empty_start_dates_count = date_ranges.indexOf(startDate);
 
     let endDate = endMonth.format('ddd');
-    const empty_end_dates_count = Array.indexOf(endDate);
+    const empty_end_dates_count = date_ranges.indexOf(endDate);
 
     console.log(empty_start_dates_count, empty_end_dates_count);
 
