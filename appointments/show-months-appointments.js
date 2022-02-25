@@ -164,10 +164,10 @@ function getAllBookedAppointments() {
                         if(doc.exists) {
                             const data_collected = doc.data();
                             const { patient_uid } = data_collected;
-                            console.log('hello', patient_uid, data_collected);
 
                             // get the patients collection
                             db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
+                                console.log('hello', patientSnapshot);
                                 const patients_doc_collected = patientSnapshot.data();
                                 appointments.push({
                                     id: doc.id,
