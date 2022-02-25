@@ -159,19 +159,16 @@ function getAllBookedAppointments() {
                         if(doc.exists) {
                             const data_collected = doc.data();
                             const { patient_uid } = data_collected;
-                            console.log(patient_uid, data_collected)
 
                             // get the patients collection
                             db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
-                                if(patientSnapshot.exists) {
-                                    const patients_doc_collected = patientSnapshot.data();
-                                    appointments.push({
-                                        id: doc.id,
-                                        ...data_collected,
-                                        ...patients_doc_collected
-                                    });
-                                    inner_page_loader.setAttribute('style', 'display:none');
-                                }
+                                const patients_doc_collected = patientSnapshot.data();
+                                appointments.push({
+                                    id: doc.id,
+                                    ...data_collected,
+                                    ...patients_doc_collected
+                                });
+                                inner_page_loader.setAttribute('style', 'display:none');
                             }).then((error) => {
                                 console.log(error);
                                 inner_page_loader.setAttribute('style', 'display:none');
