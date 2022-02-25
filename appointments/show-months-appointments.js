@@ -37,7 +37,7 @@ function load_calendar(calender_count = 0) {
     const date_ranges = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
     month_el += '<div class="div-block-24"><div class="div-block-17">';
-    
+
     month_el += '<div class="div-block-16 month-title">';
 
     date_ranges.forEach((element, index) => {
@@ -83,6 +83,7 @@ function load_calendar(calender_count = 0) {
 
         if(has_prev_month) {
             month_el += append_prev_month_el;
+            count += empty_start_dates_count;
             has_prev_month = false;
         }
 
@@ -97,7 +98,7 @@ function load_calendar(calender_count = 0) {
             }
         }
 
-        if(count >= (6 - empty_start_dates_count)) {
+        if(count >= 6) {
             month_el += '</div>';
             count = 0;
         } else count++;
