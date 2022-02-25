@@ -163,6 +163,7 @@ function getAllBookedAppointments() {
                             // get the patients collection
                             db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
                                 const patients_doc_collected = patientSnapshot.data();
+                                console.log(patients_doc_collected)
                                 appointments.push({
                                     id: doc.id,
                                     ...data_collected,
@@ -188,6 +189,8 @@ function getAllBookedAppointments() {
             window.location.href = '/login';
         }
     });
+
+    console.log(appointments);
 
     appointments.forEach((appointment, index) => {
         const { date } = appointment;

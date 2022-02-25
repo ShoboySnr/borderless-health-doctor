@@ -331,18 +331,12 @@ $('#triggerModel').on('click', function() {
 
                         const time_selected = [time_from_selected, time_to_selected].join('-');
 
-                        const month_date_selected = moment(date_selected,  "MMMM D, YYYY at h:mm:ss A Z").format("MMM");
-                        const day_date_selected = moment(date_selected,  "MMMM D, YYYY at h:mm:ss A Z").format("DD");
-                        const year_date_selected = moment(date_selected,  "MMMM D, YYYY at h:mm:ss A Z").format("YYYY");
-
                         const date_slot_els = document.querySelectorAll('.date-appointment');
 
                         date_slot_els.forEach((element, index) => {
-                            const month_slot_attr = element.getAttribute('data-selected-month');
-                            const days_slot_attr = element.getAttribute('data-selected-days');
-                            const year_slot_attr = element.getAttribute('data-selected-year');
-
-                            if(month_date_selected == month_slot_attr && day_date_selected == days_slot_attr && year_date_selected == year_slot_attr) {
+                            const month_time_attr = element.getAttribute('data-current-month-time');
+                            
+                            if(date_selected.seconds && date_selected.seconds == month_time_attr) {
                                 const time_slot_els = document.querySelectorAll('.appointment-calendar-date[data-date-range="' + time_selected + '"]');
                                 if(time_slot_els[index]) {
                                     time_slot_els[index].setAttribute('style', 'background-color: #27AE60;color: white;');
