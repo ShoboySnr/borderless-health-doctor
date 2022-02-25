@@ -50,7 +50,6 @@ function load_calendar(calender_count = 0) {
     const empty_start_dates_count = date_ranges.indexOf(startDate);
 
     let endDate = endMonth.format('ddd');
-    console.log(endDate);
     const empty_end_dates_count = date_ranges.indexOf(endDate);
 
     let append_prev_month_el = '';
@@ -61,7 +60,7 @@ function load_calendar(calender_count = 0) {
         for(let i = 0; i < empty_start_dates_count; i++) {
             const prev_days = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count + 1, 'days')
             const prev_date = prev_days.format('D');
-            const format_prev_date = prev_days.format("MMMM D, YYYY [at] h:mm:ss A [UTC]ZZ");
+            const format_prev_date = prev_days.unix();
             append_prev_month_el += '<div class="div-block-14 blank-cell" data-current-date="' + format_prev_date + '"><div class="text-block-6">' + prev_date + '</div></div>';
         }
     }
@@ -72,10 +71,9 @@ function load_calendar(calender_count = 0) {
         has_end_month = true;
 
         for(let i = empty_end_dates_count; i < date_ranges.length - 1; i++) {
-            console.log(i, date_ranges.length)
             const next_days = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count, 'days');
             const next_date = next_days.format('D');
-            const format_next_date = next_days.format("MMMM D, YYYY [at] h:mm:ss A [UTC]ZZ");
+            const format_next_date = next_days.unix();
             append_end_month_el += '<div class="div-block-14 blank-cell" data-current-date="' + format_next_date + '"><div class="text-block-6">' + next_date + '</div></div>';
         }
     }
@@ -93,7 +91,7 @@ function load_calendar(calender_count = 0) {
         }
 
 
-        const format_current_date = moment(`${dateList[i].days} ${dateList[i].month} ${dateList[i].year}`, "D MMMM YYYY").format("MMMM D, YYYY [at] h:mm:ss A [UTC]ZZ");
+        const format_current_date = moment(`${dateList[i].days} ${dateList[i].month} ${dateList[i].year}`, "D MMMM YYYY").unix();
 
         month_el += '<div class="div-block-14" data-current-date="' + format_current_date + '"><div class="text-block-6">' + dateList[i].days + '</div></div>';
 
@@ -119,7 +117,6 @@ function load_calendar(calender_count = 0) {
 
     let userBackAppointmentSelection = document.querySelectorAll('.back-appointment-arrow');
     for(let i = 0; i < userBackAppointmentSelection.length; i++) {
-        console.log(i)
         userBackAppointmentSelection[i].addEventListener("click", () => {
             backAppointmentCalendarNav(calender_count) 
         })
@@ -155,9 +152,7 @@ function getAllBookedAppointments() {
     auth.onAuthStateChanged((user) => {
         if(user) {
             const doctor_uid = user.uid;
-            console.log(doctor_uid);
             let appointmentRef = db.collection('test-appointments').where('doctor_uid', '==', doctor_uid).where('patient_uid', '!=', null);
-            console.log(appointmentRef);
             appointmentRef.get().then((querySnapshot) => {
                 if(!querySnapshot.empty) {
                     querySnapshot.forEach((doc) => {
@@ -194,13 +189,11 @@ function getAllBookedAppointments() {
         }
     });
 
-    console.log(appointments);
-
     appointments.forEach((appointment, index) => {
         const { date } = appointment;
         const { patient_uid } = appointment;
 
-        const get_selected_date = document.querySelector('div[data-current-date*="' + date.toString() + '"]');
+        const get_selected_date = document.querySelector('div[data-current-date="' + date.toString() + '"]');
         console.log(appointment, get_selected_date);
 
         if(get_selected_date) {
