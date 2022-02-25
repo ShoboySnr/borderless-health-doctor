@@ -146,7 +146,7 @@ function getAllBookedAppointments() {
     auth.onAuthStateChanged((user) => {
         if(user) {
             const doctor_uid = user.uid;
-            let appointmentRef = d.collection('test-appointments').where('doctor_uid', '==', doctor_uid).where('patient_uid', '!=', null);
+            let appointmentRef = db.collection('test-appointments').where('doctor_uid', '==', doctor_uid).where('patient_uid', '!=', null);
             appointmentRef.get().then((querySnapshot) => {
                 if(!querySnapshot.empty) {
                     querySnapshot.forEach((doc) => {
