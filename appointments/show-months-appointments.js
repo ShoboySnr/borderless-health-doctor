@@ -51,6 +51,7 @@ function load_calendar(calender_count = 0) {
 
     let endDate = endMonth.format('ddd');
     const empty_end_dates_count = date_ranges.indexOf(endDate);
+    console.log(empty_end_dates_count);
 
     console.log(empty_start_dates_count, empty_end_dates_count);
 
