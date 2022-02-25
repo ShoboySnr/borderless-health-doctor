@@ -171,7 +171,7 @@ function getAllBookedAppointments() {
                                     get_selected_date.setAttribute('style', 'background-color: #27AE60;color: white;');
                                     const url = '/appointments/appointment?id=' + patient_uid;
                                     const text_el = `${patients_doc_collected.firstname} ${patients_doc_collected.lastname}`
-                                    get_selected_date.innerHTML += '<a href="' + url + '" style="height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;" >' + text_el +'</a>';
+                                    get_selected_date.innerHTML += '<a href="' + url + '" style="position:absolute;top:0;height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;" >' + text_el +'</a>';
                                 }
 
                                 inner_page_loader.setAttribute('style', 'display:none');
