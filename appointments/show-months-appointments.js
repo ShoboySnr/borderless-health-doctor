@@ -44,10 +44,10 @@ function load_calendar(calender_count = 0) {
 
     month_el += '</div>';
 
-    let startDate = startMonth.format(ddd);
+    let startDate = startMonth.format('ddd');
     const empty_start_dates_count = Array.indexOf(startDate);
 
-    let endDate = endMonth.format(ddd);
+    let endDate = endMonth.format('ddd');
     const empty_end_dates_count = Array.indexOf(endDate);
 
     console.log(empty_start_dates_count, empty_end_dates_count);
@@ -60,7 +60,11 @@ function load_calendar(calender_count = 0) {
 
         console.log(date_ranges[count],  dateList[i].shortday);
 
-        month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
+        if(count <= empty_start_dates_count || count > empty_end_dates_count) {
+            month_el += '<div class="div-block-14 blank-cell"></div>';
+        } else {
+            month_el += '<div class="div-block-14"><div class="text-block-6">' + dateList[i].days + '</div></div>';
+        }
             
         // month_el += '<div class="div-block-14 blank-cell"></div>';
 
