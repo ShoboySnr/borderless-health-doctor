@@ -103,17 +103,17 @@ function load_calendar(calender_count = 0) {
 
     }
 
-    let userAppointmentSelection = document.querySelectorAll('back-appointment-arrow');
-    for(let i = 0; i < userAppointmentSelection.length; i++) {
+    let userBackAppointmentSelection = document.querySelectorAll('back-appointment-arrow');
+    for(let i = 0; i < userBackAppointmentSelection.length; i++) {
         console.log(i)
-        userAppointmentSelection[i].addEventListener("click", () => {
+        userBackAppointmentSelection[i].addEventListener("click", () => {
             backAppointmentCalendarNav(calender_count) 
         })
     }
 
-    let userAppointmentSelection = document.querySelectorAll('forward-appointment-arrow');
-    for(let i = 0; i < userAppointmentSelection.length; i++) {
-        userAppointmentSelection[i].addEventListener("click", () => {
+    let userForwardAppointmentSelection = document.querySelectorAll('forward-appointment-arrow');
+    for(let i = 0; i < userForwardAppointmentSelection.length; i++) {
+        userForwardAppointmentSelection[i].addEventListener("click", () => {
             forwardAppointmentCalendarNav(calender_count) 
         })
     }
