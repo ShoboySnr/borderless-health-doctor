@@ -65,7 +65,7 @@ function load_calendar(calender_count = 0) {
 
     let append_end_month_el = '';
     let has_end_month = false;
-    if(empty_end_dates_count < date_ranges.length) {
+    if(empty_end_dates_count > 0) {
         has_end_month = true;
 
         for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
