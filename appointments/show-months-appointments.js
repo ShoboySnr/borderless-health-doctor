@@ -69,7 +69,7 @@ function load_calendar(calender_count = 0) {
         has_end_month = true;
 
         for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
-            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count, 'days').format('D');
+            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count - 1, 'days').format('D');
             append_end_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + next_date + '</div></div>';
         }
     }
@@ -146,8 +146,15 @@ function getAllBookedAppointments() {
     auth.onAuthStateChanged((user) => {
         if(user) {
             const doctor_uid = user.uid;
-            let appointmentRef = d.collection('test-appointments').where('doctor_uid', '==', doctor_uid);
-            appointmentRef.get().then(() => {
+            let appointmentRef = d.collection('test-appointments').where('doctor_uid', '==', doctor_uid).where('patient_uid', '!=', null);
+            appointmentRef.get().then((querySnapshot) => {
+                if(!querySnapshot.empty) {
+                    querySnapshot.forEach((doc) => {
+                        if(doc.exists) {
+
+                        }
+                    });
+                }
 
             })
 
