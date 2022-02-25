@@ -325,7 +325,6 @@ $('#triggerModel').on('click', function() {
                 querySnapshot.forEach((doc) => {
                     if(doc.exists) {
                         const data_collected = doc.data();
-                        console.log(doc, data_collected);
                         const date_selected = data_collected.date;
                         const time_from_selected = data_collected.time_from;
                         const time_to_selected = data_collected.time_to;

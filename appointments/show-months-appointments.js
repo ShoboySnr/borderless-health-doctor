@@ -68,8 +68,8 @@ function load_calendar(calender_count = 0) {
     if(empty_end_dates_count < date_ranges.length) {
         has_end_month = true;
 
-        for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
-            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count - 1, 'days').format('D');
+        for(let i = empty_end_dates_count; i < date_ranges.length - 1 ; i++) {
+            const next_date = moment().add(calender_count+1, 'month').startOf('month').add(i - empty_end_dates_count, 'days').format('D');
             append_end_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + next_date + '</div></div>';
         }
     }
@@ -151,11 +151,32 @@ function getAllBookedAppointments() {
                 if(!querySnapshot.empty) {
                     querySnapshot.forEach((doc) => {
                         if(doc.exists) {
+                            const data_collected = doc.data();
+                            const { patient_uid } = data_collected;
+
+                            // get the patients collection
+                            db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
+                                if(patientSnapshot.exists) {
+                                    const patients_doc_collected = patientSnapshot.data();
+                                    appointments.push({
+                                        id: doc.id,
+                                        ...data_collected,
+                                        ...patients_doc_collected
+                                    });
+                                    inner_page_loader.setAttribute('style', 'display:none');
+                                }
+                            }).then((error) => {
+                                console.log(error);
+                                inner_page_loader.setAttribute('style', 'display:none');
+                            })
 
                         }
                     });
                 }
 
+            }).then((error) => {
+                console.log(error);
+                inner_page_loader.setAttribute('style', 'display:none');
             })
 
         } else {
@@ -168,5 +189,6 @@ function getAllBookedAppointments() {
 
 document.addEventListener('DOMContentLoaded', function() {
     load_calendar();
+    getAllBookedAppointments();
     // firebase api to get appointment
 });
