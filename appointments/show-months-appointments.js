@@ -94,7 +94,7 @@ function load_calendar(calender_count = 0) {
             }
         }
 
-        if(count == 6) {
+        if(count >= 6) {
             month_el += '</div>';
             count = 0;
         } else count++;
