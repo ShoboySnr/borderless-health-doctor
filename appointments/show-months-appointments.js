@@ -161,7 +161,6 @@ function getAllBookedAppointments() {
                             // get the patients collection
                             db.collection('test-patients').doc(patient_uid).get().then((patientSnapshot) => {
                                 const patients_doc_collected = patientSnapshot.data();
-                                console.log(patients_doc_collected)
 
                                 const { date } = data_collected;
                                 const { patient_uid } = data_collected;
@@ -171,7 +170,8 @@ function getAllBookedAppointments() {
                                 if(get_selected_date) {
                                     get_selected_date.setAttribute('style', 'background-color: #27AE60;color: white;');
                                     const url = '/appointments/appointment?id=' + patient_uid;
-                                    get_selected_date.innerHTML += '<a href="' + url + '" style="height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;" >Booked</a>';
+                                    const text_el = `${patients_doc_collected.firstname} ${patients_doc_collected.lastname}`
+                                    get_selected_date.innerHTML += '<a href="' + url + '" style="height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;" >' + text_el +'</a>';
                                 }
 
                                 inner_page_loader.setAttribute('style', 'display:none');
