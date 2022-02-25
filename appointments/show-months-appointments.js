@@ -57,8 +57,8 @@ function load_calendar(calender_count = 0) {
     if(empty_start_dates_count > 0) {
         has_prev_month = true;
 
-        for(let i = 0; i < empty_start_dates_count; i--) {
-            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(i - empty_start_dates_count, 'days').format('D');
+        for(let i = 0; i < empty_start_dates_count; i++) {
+            const prev_date = moment().add(calender_count-1, 'month').endOf('month').add(i, 'days').format('D');
             append_prev_month_el += '<div class="div-block-14 blank-cell"><div class="text-block-6">' + prev_date + '</div></div>';
         }
     }
@@ -134,6 +134,14 @@ function forwardAppointmentCalendarNav(calender_count) {
     calender_count += 1;
     load_calendar(calender_count);
     //add firebase api to get all appointments
+}
+
+function getAllBookedAppointments() {
+    const inner_page_loader = document.querySelector('#calendar-appointment .inner-loader-class');
+
+    inner_page_loader.setAttribute('style', 'display:flex');
+
+
 }
 
 
