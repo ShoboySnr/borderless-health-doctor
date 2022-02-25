@@ -102,19 +102,15 @@ function load_calendar(calender_count = 0) {
 
     }
 
-    for(let i = empty_end_dates_count; i < date_ranges.length; i++) {
-        month_el += '<div class="div-block-14 blank-cell"></div>';
-    }
-    
-
-    var userSelection = document.querySelectorAll('back-appointment-arrow');
+    let userAppointmentSelection = document.querySelectorAll('back-appointment-arrow');
     for(let i = 0; i < userSelection.length; i++) {
+        console.log(i)
         userSelection[i].addEventListener("click", () => {
             backAppointmentCalendarNav(calender_count) 
         })
     }
 
-    var userSelection = document.querySelectorAll('forward-appointment-arrow');
+    let userAppointmentSelection = document.querySelectorAll('forward-appointment-arrow');
     for(let i = 0; i < userSelection.length; i++) {
         userSelection[i].addEventListener("click", () => {
             forwardAppointmentCalendarNav(calender_count) 
