@@ -36,6 +36,8 @@ function load_calendar(calender_count = 0) {
 
     const date_ranges = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
+    month_el += '<div class="div-block-24"><div class="div-block-17">';
+    
     month_el += '<div class="div-block-16 month-title">';
 
     date_ranges.forEach((element, index) => {
@@ -43,8 +45,6 @@ function load_calendar(calender_count = 0) {
     });
 
     month_el += '</div>';
-
-    month_el = '<div class="div-block-24"><div class="div-block-17">';
 
     let startDate = startMonth.format('ddd');
     const empty_start_dates_count = date_ranges.indexOf(startDate);
