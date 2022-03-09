@@ -142,7 +142,7 @@ function forwardAppointmentCalendarNav(calender_count) {
     getAllBookedAppointments();
 }
 
-function getAllBookedAppointments() {
+async function getAllBookedAppointments() {
     const inner_page_loader = document.querySelector('#calendar-appointment .inner-loader-class');
 
     inner_page_loader.setAttribute('style', 'display:flex');
