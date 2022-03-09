@@ -119,7 +119,7 @@
         append_html += '<div class="div-block-21"></div>';
         current_dates.forEach((element, index) => {
             const date_selected = moment(`${element.month} ${element.days}, ${element.year}`, "MMMM D, YYYY").unix();
-            append_html += '<div class="text-block-8 date-appointment select-appointment-' + index +'" data-current-month-time="' + date_selected + '"><span style="text-transform: uppercase">' + element.month  + '</span><br><strong class="bold-text">' + element.days +'</strong><br>'+ element.showdays +'</div>';
+            append_html += '<div class="text-block-8 date-appointment select-appointment-' + index +'" data-current-month-time="' + date_selected + '" date-current-month-date="' + moment(`${element.month} ${element.days}, ${element.year}`, "MMMM D, YYYY").format("MMMM D, YYYY") +'"><span style="text-transform: uppercase">' + element.month  + '</span><br><strong class="bold-text">' + element.days +'</strong><br>'+ element.showdays +'</div>';
         })
     
         append_html += '</div>'
