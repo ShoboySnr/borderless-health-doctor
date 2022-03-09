@@ -346,6 +346,9 @@ function getAllSetAppointments() {
                                   time_slot_els[index].setAttribute('style', 'background-color: #27AE60;color: white;');
                                   time_slot_els[index].setAttribute('data-appointment-id', doc.id);
                                   time_slot_els[index].classList.add('checked');
+                                  time_slot_els[index].querySelector('label').textContent = time_selected;
+                                  time_slot_els[index].querySelector('label').style.display = 'block';
+
                               }
                           }
                       });
