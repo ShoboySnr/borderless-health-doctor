@@ -147,7 +147,7 @@ function getAllBookedAppointments() {
 
     inner_page_loader.setAttribute('style', 'display:flex');
 
-    auth.onAuthStateChanged((user) => {
+    await auth.onAuthStateChanged((user) => {
         if(user) {
             const doctor_uid = user.uid;
             let appointmentRef = db.collection('test-appointments').where('doctor_uid', '==', doctor_uid).where('patient_uid', '!=', '');
@@ -182,7 +182,6 @@ function getAllBookedAppointments() {
                                 })
                             }
                         }
-                        inner_page_loader.setAttribute('style', 'display:none');
                     });
                 }
 
@@ -196,6 +195,8 @@ function getAllBookedAppointments() {
             window.location.href = '/login';
         }
     });
+
+    inner_page_loader.setAttribute('style', 'display:none');
 }
 
 
