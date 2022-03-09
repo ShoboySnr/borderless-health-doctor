@@ -347,7 +347,7 @@ function getAllSetAppointments() {
                                   time_slot_els[index].setAttribute('data-appointment-id', doc.id);
                                   time_slot_els[index].classList.add('checked');
                                   time_slot_els[index].querySelector('label').textContent = time_selected;
-                                  time_slot_els[index].querySelector('label').style.display = 'block';
+                                  time_slot_els[index].querySelector('label').setAttribute('style', 'display:block;');
 
                               }
                           }
