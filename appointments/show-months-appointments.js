@@ -193,7 +193,6 @@ async function getAllBookedAppointments() {
             })
 
         } else {
-            alert('Please login to proceed');
             window.location.href = '/login';
         }
     });
