@@ -185,6 +185,8 @@ async function getAllBookedAppointments() {
                     });
                 }
 
+                inner_page_loader.setAttribute('style', 'display:none');
+
             }).catch((error) => {
                 console.log(error);
                 inner_page_loader.setAttribute('style', 'display:none');
@@ -195,8 +197,6 @@ async function getAllBookedAppointments() {
             window.location.href = '/login';
         }
     });
-
-    inner_page_loader.setAttribute('style', 'display:none');
 }
 
 
