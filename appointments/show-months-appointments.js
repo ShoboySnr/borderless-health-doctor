@@ -195,6 +195,8 @@ function getAllBookedAppointments() {
             window.location.href = '/login';
         }
     });
+
+    inner_page_loader.setAttribute('style', 'display:none');
 }
 
 
