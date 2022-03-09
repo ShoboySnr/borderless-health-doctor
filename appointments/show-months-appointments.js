@@ -173,15 +173,16 @@ function getAllBookedAppointments() {
                                         const url = '/appointments/appointment?ap=' + doc.id;
                                         const text_el = `${patients_doc_collected.firstname} ${patients_doc_collected.lastname}`
                                         get_selected_date.innerHTML += '<a href="' + url + '" style="position:absolute;top:0;height: 100%;width: 100%;display:flex;justify-content:center;align-items:center;color:#fff;" >' + text_el +'</a>';
+                                    
+                                        inner_page_loader.setAttribute('style', 'display:none');
                                     }
-
-                                    inner_page_loader.setAttribute('style', 'display:none');
                                 }).catch((error) => {
                                     console.log(error);
                                     inner_page_loader.setAttribute('style', 'display:none');
                                 })
                             }
                         }
+                        inner_page_loader.setAttribute('style', 'display:none');
                     });
                 }
 
@@ -195,8 +196,6 @@ function getAllBookedAppointments() {
             window.location.href = '/login';
         }
     });
-
-    inner_page_loader.setAttribute('style', 'display:none');
 }
 
 
