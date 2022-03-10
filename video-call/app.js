@@ -4,7 +4,7 @@ async function joinRoom() {
     //load screen
     inner_loader.setAttribute('style', 'display: flex;');
 
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(async (user) => {
         if(user) {
             const roomName = user.displayName ?  `${user.displayName}'s Room` : `${user.email}'s Room`;
             
@@ -17,7 +17,7 @@ async function joinRoom() {
             
                 let request = cbrRequest('/token', 'POST', true, idToken);
 
-                request.onload = (response) => {
+                request.onload = async (response) => {
                     let data = JSON.parse(request.response);
 
                     if (request.status >= 200 && request.status < 400) {
@@ -138,7 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const joinButton = document.getElementById("join-button");
     
     joinButton.addEventListener("click", async (event) => {
-        $('#triggerVideoModal').modal({
+        document.getElementById('triggerVideoModal').modal({
             fadeDuration: 350,
             showClose: false
         });
