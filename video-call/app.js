@@ -1,5 +1,5 @@
 async function joinRoom() {
-    const inner_loader = document.getElementById('#triggerVideoModal').querySelector('.inner-loader-class');
+    const inner_loader = document.getElementById('triggerVideoModal').querySelector('.inner-loader-class');
 
     //load screen
     inner_loader.setAttribute('style', 'display: flex;');
