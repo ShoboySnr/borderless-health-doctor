@@ -2,16 +2,7 @@ function joinRoom() {
     auth.onAuthStateChanged((user) => {
         if(user) {
             const roomName = user.displayName ?  `${user.displayName}'s Room` : `${user.email}'s Room`;
-            generateToken(roomName);
-        } else {
-            window.location.href = '/login';
-        }
-    });
-}
-
-function generateToken(roomName) {
-    auth.onAuthStateChanged((user) => {
-        if(user) {
+            
             auth.currentUser.getIdToken(true).then((idToken) => {
 
                 const data = {
@@ -40,8 +31,11 @@ function generateToken(roomName) {
             // Handle error
             console.error(`Error: ${error}`);
         });
+            
+        } else {
+            window.location.href = '/login';
         }
-    })
+    });
 }
 
 async function connectVideo(token, roomName, event) {
