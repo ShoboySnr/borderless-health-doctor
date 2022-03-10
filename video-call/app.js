@@ -53,7 +53,10 @@ async function connectVideo(token, roomName, inner_loader, event) {
     });
     const { connect } = twilioVideo;
 
-    const room = await connect(`${token}`, { name: 'existing-room', tracks: localTracks }).then(room => {
+    inner_loader.setAttribute('style', 'display: none;');
+    console.log(inner_loader);
+
+    const room = await connect(`${token}`, { name: roomName, tracks: localTracks }).then(room => {
         console.log(`Successfully joined a Room: ${room}`);
         room.on('participantConnected', participant => {
         console.log(`A remote Participant connected: ${participant}`);
@@ -78,8 +81,6 @@ async function connectVideo(token, roomName, inner_loader, event) {
     toggleButtons();
 
     event.preventDefault(); 
-
-    inner_loader.setAttribute('style', 'display: none;');
 }
 
 
