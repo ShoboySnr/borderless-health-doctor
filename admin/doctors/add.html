@@ -18,7 +18,7 @@ function addDoctor(event) {
     let email = formData.get('email');
     let phoneNumber = formData.get('phone-number');
     let gender = formData.get('gender');
-    let password = formData.get('password');
+    let password = generateRandomPassword();
     let speciality = formData.get('speciality');
     let language = formData.get('language');
     let gmcNumber = formData.get('gmc-number');
@@ -51,11 +51,6 @@ function addDoctor(event) {
 
     if(gender === '') {
         errMsg += '<p>Gender cannot be empty </p>';
-        errCount++;
-    }
-
-    if(password === '') {
-        errMsg += '<p>Password cannot be empty </p>';
         errCount++;
     }
 
@@ -102,20 +97,34 @@ function addDoctor(event) {
 
     const _this = this;
 
-    auth.createUserWithEmailAndPassword(email, password)
+    let secondaryConfig = {
+        apiKey: "AIzaSyCrqr3CydDvSOYLQAMjrN_w_Ts0760mtIo",
+        authDomain: "borderlesshealth-bf831.firebaseapp.com",
+        projectId: "borderlesshealth-bf831",
+        storageBucket: "borderlesshealth-bf831.appspot.com",
+        messagingSenderId: "751319104173",
+        appId: "1:751319104173:web:afdfc0895a0bdd7882e424",
+        measurementId: "G-GH9PYPJTCL"
+    };
+
+    let secondaryAuth = firebase.initializeApp(secondaryConfig, "auth");
+
+    secondaryAuth.auth().createUserWithEmailAndPassword(email, password)
     .then((userCredentials) => {
         data.doctor_uid = userCredentials.user.uid;
         db.collection("test-doctors").add(data)
         .then(() => {
-                userCredentials.user.sendEmailVerification().then(function() {
+                secondaryAuth.auth().sendPasswordResetEmail(email).then(function() {
                 _this.reset();
-                const success_message = 'Successfully created a Doctor and Verification email has been sent to the Doctor';
+                const success_message = 'Successfully created a Doctor and Password reset email has been sent to the Doctor';
                 
                 //show success message
                 let success_message_el = document.getElementById("success-message");
                 success_message_el.innerHTML = success_message;
                 success_message_el.style.display = "block";
                 loader.setAttribute('style', 'display: none;');
+
+                secondaryAuth.auth().signOut();
 
                 return userCredentials;
             }).catch(function(error) {
@@ -145,7 +154,23 @@ function addDoctor(event) {
 }
 
 
+function generateRandomPassword() {
+    let chars = '0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let passwordLength = 12;
+    let password = '';
+
+    for (var i = 0; i <= passwordLength; i++) {
+        var randomNumber = Math.floor(Math.random() * chars.length);
+        password += chars.substring(randomNumber, randomNumber +1);
+    }
+
+    return password;
+}
+
+
 window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('wf-form-doctor-Form').addEventListener('submit', addDoctor, true);   
 });
+</script>
+<script src="https://studio14.github.io/borderless-health-frontend/add-doctor.js">
 </script>

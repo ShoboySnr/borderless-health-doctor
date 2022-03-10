@@ -34,7 +34,11 @@ function login_with_firebase(event) {
         userAvatar.src = user.photoURL;
     }
     loader.setAttribute('style', 'display: none;');
-    location.href ='/appointments/all';
+
+    //check if signed in user exists on doctors collection
+    db.collection('test-doctors').doc(userCredential.uid).then(() => {
+        location.href ='/appointments/all';
+    })
 
     })
     .catch((error) => {

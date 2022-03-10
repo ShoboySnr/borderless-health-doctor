@@ -9,6 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-firestore.js"></script>
+<script src="//sdk.twilio.com/js/video/releases/2.17.1/twilio-video.min.js"></script>
 <script>
 // Refernece to Webflow UI Elements
 const signInButton = document.querySelector('#signInButton');
@@ -36,6 +37,9 @@ firebase.initializeApp(firebaseConfig);
 const auth = new firebase.auth();
 const db = firebase.firestore();
 let currentUser = null;
+
+// Twillio Integration
+const twilioVideo = Twilio.Video;
 
 // public pages
 let publicPages = [
@@ -153,15 +157,14 @@ auth.onAuthStateChanged((user) => {
 });
 }
 
-function cbrRequest(endpoint, method, async, payload) {
-  const baseUrl = new URL('https://api.com');
+function cbrRequest(endpoint, method, async, authorization, payload) {
+  const baseUrl = new URL('https://borderless-health-dev.herokuapp.com/api');
   const request = new XMLHttpRequest();
   const url = baseUrl.toString() + endpoint;
   request.open(method, url, async)
-  // request.setRequestHeader('nc-user-token', '<firebase User ID TOken>')
-  request.setRequestHeader('Content-type', 'application/json');
+  request.setRequestHeader('authorization', authorization);
+  request.setRequestHeader('Content-Type', 'application/json');
   request.setRequestHeader('Accept', 'application/json');
-  request.setRequestHeader('magicword', 'Obaatokpere')
   return request;
 }
 
@@ -173,9 +176,17 @@ function set_date_time_appointment(index, event) {
   event.preventDefault();
   const time_selected = event.target.getAttribute('data-date-range');
   const loader = document.querySelector('#loader');
+  //show success message
+  let success_message_el = document.getElementById("success-message");
+  let failed_message_el = document.getElementById("failed-message");
 
   //load screen
   loader.setAttribute('style', 'display: flex;');
+  success_message_el.innerHTML = '';
+  failed_message_el.innerHTML = '';
+  success_message_el.style.display = 'none';
+  failed_message_el.style.display = 'none';
+
 
   const child_node = event.target;
   const parent_node = child_node.parentNode;
@@ -191,6 +202,14 @@ function set_date_time_appointment(index, event) {
 
   const split_time_selected = time_selected.split('-');
   let date_selected = moment(`${specific_month_selected} ${split_time_selected[0]}`, "MMMM D, YYYY h:m:s A").utc().unix();
+  console.log(date_selected, moment().utc().unix())
+  if(date_selected <= moment().utc().unix()) {
+    let error_message = 'Sorry, you cannot set available dates for past days';
+    failed_message_el.innerHTML = error_message;
+    failed_message_el.style.display = "block";
+    loader.setAttribute('style', 'display: none;');
+    return;
+  }
   date_selected = new Date(date_selected * 1000);
   
   auth.onAuthStateChanged((user) => {
@@ -211,26 +230,24 @@ function set_date_time_appointment(index, event) {
     .then((docRef) => {
         const success_message = 'Successfully updated your appointments';
         
-        //show success message
-        let success_message_el = document.getElementById("success-message");
+        
         success_message_el.innerHTML = success_message;
         success_message_el.style.display = "block";
-        child_node.setAttribute('style', 'background-color: #27AE60;color: white;');
+        child_node.setAttribute('style', 'background-color: #27AE60;color: white;border-color: #27AE60;');
         child_node.setAttribute('data-appointment-id', docRef.id);
+        child_node.textContent = time_selected;
         child_node.classList.add('checked');
         loader.setAttribute('style', 'display: none;');
 
         //generate rooms url using twillio
     }).catch((error) => {
         let error_message = error.message;
-        let failed_message_el = document.getElementById("failed-message");
         failed_message_el.innerHTML = error_message;
         failed_message_el.style.display = "block";
         loader.setAttribute('style', 'display: none;');
         return;
     });
   } else {
-    alert('You are currently not signed in.');
     window.location.href = '/login'
   }
 });
@@ -240,10 +257,16 @@ function remove_date_time_appointment(index, event) {
 event.preventDefault();
   const time_selected = event.target.getAttribute('data-date-range');
   const collection_id = event.target.getAttribute('data-appointment-id');
+  let success_message_el = document.getElementById("success-message");
+  let failed_message_el = document.getElementById("failed-message");
   const loader = document.querySelector('#loader');
 
   //load screen
   loader.setAttribute('style', 'display: flex;');
+  success_message_el.innerHTML = '';
+  failed_message_el.innerHTML = '';
+  success_message_el.style.display = 'none';
+  failed_message_el.style.display = 'none';
 
   if(collection_id) {
     auth.onAuthStateChanged((user) => {
@@ -255,13 +278,22 @@ event.preventDefault();
           event.target.setAttribute('style', 'background-color: white;color: black;');
           event.target.removeAttribute('data-appointment-id');
           event.target.classList.remove('checked');
+          event.target.textContent = '';
+
+          const success_message = 'Successfully removed this appointment';
+
+          success_message_el.innerHTML = success_message;
+          success_message_el.style.display = "block";
           loader.setAttribute('style', 'display: none;');
         }).catch((error) => {
+          const failed_message = 'There was an error removing this appointment. Error: ' + error.message;
+
+          failed_message_el.innerHTML = failed_message;
+          failed_message_el.style.display = "block";
           console.log(error);
         });
 
     } else {
-      alert('You are currently not signed in.');
       window.location.href = '/login'
     }
 });
@@ -290,7 +322,7 @@ calendar_date.forEach((date, index) => {
 
 $('#triggerModel').on('click', function() {
 $('#triggerAppointmentModal').modal({
-  fadeDuration: 250,
+  fadeDuration: 350,
   showClose: false
 });
 return false;
@@ -307,6 +339,7 @@ function getAllSetAppointments() {
     appointment_cal_els[i].setAttribute('style', 'background-color: white;color: black;');
     appointment_cal_els[i].removeAttribute('data-appointment-id');
     appointment_cal_els[i].classList.remove('checked');
+    appointment_cal_els[i].textContent = '';
   }
 
 
@@ -343,11 +376,10 @@ function getAllSetAppointments() {
                           if(date_selected.seconds && active_selected_days == month_time_attr) {
                               const time_slot_els = document.querySelectorAll('.appointment-calendar-date[data-date-range="' + time_selected + '"]');
                               if(time_slot_els[index]) {
-                                  time_slot_els[index].setAttribute('style', 'background-color: #27AE60;color: white;');
+                                  time_slot_els[index].setAttribute('style', 'background-color: #27AE60;color: white;border-color: #27AE60;');
                                   time_slot_els[index].setAttribute('data-appointment-id', doc.id);
                                   time_slot_els[index].classList.add('checked');
-                                  time_slot_els[index].querySelector('label').textContent = time_selected;
-                                  time_slot_els[index].querySelector('label').setAttribute('style', 'display:block;');
+                                  time_slot_els[index].textContent = time_selected;
 
                               }
                           }
@@ -371,6 +403,20 @@ window.addEventListener('DOMContentLoaded', () => {
   let currentPath = window.location.pathname;
   if (!publicPages.includes(currentPath)) {
       getAllSetAppointments();
+  }
+
+  if(document.querySelector('.modal-container')) {
+    document.querySelector('.modal-container').addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    })
+  }
+
+  if(document.getElementById('triggerAppointmentModal')) {
+    document.getElementById('triggerAppointmentModal').addEventListener('click', (event) => {
+      $.modal.close();
+    })
   }
 });
 </script>
