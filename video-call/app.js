@@ -57,13 +57,13 @@ async function connectVideo(token, roomName, inner_loader, event) {
         console.log(`Successfully joined a Room: ${room}`);
         room.on('participantConnected', participant => {
         console.log(`A remote Participant connected: ${participant}`);
-        inner_loader.setAttribute('style', 'display: none;');
     });
     }, error => {
         console.error(`Unable to connect to Room: ${error.message}`);
     });
 
     const localMediaContainer = document.getElementById("local-media-container");
+    inner_loader.setAttribute('style', 'display: none;');
     localTracks.forEach((localTrack) => {
         localMediaContainer.appendChild(localTrack.attach());
     });
