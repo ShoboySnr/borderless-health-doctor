@@ -64,9 +64,6 @@ async function connectVideo(token, roomName, event) {
         console.error(`Unable to connect to Room: ${error.message}`);
     });
 
-    const twillio_video_container = document.querySelector('.twilio-video-call-container');
-    twillio_video_container.setAttribute('style', 'display:block;');
-
     const localMediaContainer = document.getElementById("local-media-container");
     localTracks.forEach((localTrack) => {
         localMediaContainer.appendChild(localTrack.attach());
@@ -145,7 +142,7 @@ window.addEventListener('DOMContentLoaded', () => {
             fadeDuration: 350,
             showClose: false
         });
-        joinRoom();
+        await joinRoom();
     });
 
 
