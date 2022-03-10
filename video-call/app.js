@@ -140,6 +140,6 @@ window.addEventListener('DOMContentLoaded', () => {
       joinRoom();
     });
 
-    const leaveButton = document.getElementById("leave-button");
-    leaveButton.addEventListener("click", onLeaveButtonClick);
+    // const leaveButton = document.getElementById("leave-button");
+    // leaveButton.addEventListener("click", onLeaveButtonClick);
 })
