@@ -1,4 +1,18 @@
-function generateToken() {
+function joinRoom() {
+    auth.onAuthStateChanged((user) => {
+        if(user) {
+            const roomName = user.displayName ?  `${user.displayName}'s Room` : `${user.email}'s Room`;
+            generateToken(roomName);
+        } else {
+            window.location.href = '/login';
+        }
+    }).catch((error) =>  {
+        // Handle error
+        console.error(`Error: ${error}`);
+    });
+}
+
+function generateToken(roomName) {
     auth.onAuthStateChanged((user) => {
         if(user) {
             auth.currentUser.getIdToken(true).then((idToken) => {
@@ -19,7 +33,7 @@ function generateToken() {
 
                         console.log(identity, token);
 
-                        connectVideo(token);
+                        connectVideo(token, roomName);
                     }
                 }
 
@@ -33,15 +47,99 @@ function generateToken() {
     })
 }
 
-function connectVideo(token) {
+async function connectVideo(token, roomName) {
+    const localTracks = await twilioVideo.createLocalTracks({
+        audio: true,
+        video: { width: 640 },
+    });
     const { connect } = twilioVideo;
 
-    connect(`${token}`, { name: 'existing-room' }).then(room => {
+    const room = await connect(`${token}`, { name: 'existing-room', tracks: localTracks }).then(room => {
         console.log(`Successfully joined a Room: ${room}`);
         room.on('participantConnected', participant => {
-          console.log(`A remote Participant connected: ${participant}`);
-        });
-      }, error => {
+        console.log(`A remote Participant connected: ${participant}`);
+    });
+    }, error => {
         console.error(`Unable to connect to Room: ${error.message}`);
-      });
+    });
+
+    const localMediaContainer = document.getElementById("local-media-container");
+    localTracks.forEach((localTrack) => {
+        localMediaContainer.appendChild(localTrack.attach());
+    });
+
+    // display video/audio of other participants who have already joined
+    room.participants.forEach(onParticipantConnected);
+
+    // subscribe to new participant joining event so we can display their video/audio
+    room.on("participantConnected", onParticipantConnected);
+
+    room.on("participantDisconnected", onParticipantDisconnected);
+
+    toggleButtons();
+
+    event.preventDefault(); 
 }
+
+
+// when a participant disconnects, remove their video and audio from the DOM.
+const onParticipantDisconnected = (participant) => {
+  const participantDiv = document.getElementById(participant.sid);
+  participantDiv.parentNode.removeChild(participantDiv);
+};
+
+const onParticipantConnected = (participant) => {
+  const participantDiv = document.createElement("div");
+  participantDiv.id = participant.sid;
+
+  // when a remote participant joins, add their audio and video to the DOM
+  const trackSubscribed = (track) => {
+    participantDiv.appendChild(track.attach());
+  };
+  participant.on("trackSubscribed", trackSubscribed);
+
+  participant.tracks.forEach((publication) => {
+    if (publication.isSubscribed) {
+      trackSubscribed(publication.track);
+    }
+  });
+
+  document.body.appendChild(participantDiv);
+
+  const trackUnsubscribed = (track) => {
+    track.detach().forEach((element) => element.remove());
+  };
+
+  participant.on("trackUnsubscribed", trackUnsubscribed);
+};
+
+const onLeaveButtonClick = (event) => {
+  room.localParticipant.tracks.forEach((publication) => {
+    const track = publication.track;
+    // stop releases the media element from the browser control
+    // which is useful to turn off the camera light, etc.
+    track.stop();
+    const elements = track.detach();
+    elements.forEach((element) => element.remove());
+  });
+  room.disconnect();
+
+  toggleButtons();
+};
+
+const toggleButtons = () => {
+  document.getElementById("leave-button").classList.toggle("hidden");
+  document.getElementById("join-button").classList.toggle("hidden");
+};
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    const joinButton = document.getElementById("join-button");
+    
+    joinButton.addEventListener("click", async (event) => {
+      joinRoom();
+    });
+
+    const leaveButton = document.getElementById("leave-button");
+    leaveButton.addEventListener("click", onLeaveButtonClick);
+})
