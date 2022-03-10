@@ -6,9 +6,6 @@ function joinRoom() {
         } else {
             window.location.href = '/login';
         }
-    }).catch((error) =>  {
-        // Handle error
-        console.error(`Error: ${error}`);
     });
 }
 
