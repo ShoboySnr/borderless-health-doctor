@@ -138,7 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const joinButton = document.getElementById("join-button");
     
     joinButton.addEventListener("click", async (event) => {
-        document.getElementById('triggerVideoModal').modal({
+        $('#triggerVideoModal').modal({
             fadeDuration: 350,
             showClose: false
         });
