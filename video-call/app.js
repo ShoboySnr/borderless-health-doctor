@@ -26,9 +26,7 @@ async function joinRoom() {
 
                         console.log(identity, token);
 
-                        await connectVideo(token, roomName, event);
-
-                        inner_loader.setAttribute('style', 'display: none;');
+                        await connectVideo(token, roomName, inner_loader, event);
 
                     }
                 }
@@ -48,7 +46,7 @@ async function joinRoom() {
     });
 }
 
-async function connectVideo(token, roomName, event) {
+async function connectVideo(token, roomName, inner_loader, event) {
     const localTracks = await twilioVideo.createLocalTracks({
         audio: true,
         video: { width: 640 },
@@ -80,6 +78,8 @@ async function connectVideo(token, roomName, event) {
     toggleButtons();
 
     event.preventDefault(); 
+
+    inner_loader.setAttribute('style', 'display: none;');
 }
 
 
