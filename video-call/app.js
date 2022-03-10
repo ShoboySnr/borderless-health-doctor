@@ -33,7 +33,7 @@ function generateToken(roomName) {
 
                         console.log(identity, token);
 
-                        connectVideo(token, roomName);
+                        connectVideo(token, roomName, event);
                     }
                 }
 
@@ -47,7 +47,7 @@ function generateToken(roomName) {
     })
 }
 
-async function connectVideo(token, roomName) {
+async function connectVideo(token, roomName, event) {
     const localTracks = await twilioVideo.createLocalTracks({
         audio: true,
         video: { width: 640 },
@@ -62,6 +62,9 @@ async function connectVideo(token, roomName) {
     }, error => {
         console.error(`Unable to connect to Room: ${error.message}`);
     });
+
+    const twillio_video_container = document.querySelector('.twilio-video-call-container');
+    twillio_video_container.setAttribute('style', 'display:block;');
 
     const localMediaContainer = document.getElementById("local-media-container");
     localTracks.forEach((localTrack) => {
