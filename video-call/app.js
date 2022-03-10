@@ -53,13 +53,11 @@ async function connectVideo(token, roomName, inner_loader, event) {
     });
     const { connect } = twilioVideo;
 
-    inner_loader.setAttribute('style', 'display: none;');
-    console.log(inner_loader);
-
     const room = await connect(`${token}`, { name: roomName, tracks: localTracks }).then(room => {
         console.log(`Successfully joined a Room: ${room}`);
         room.on('participantConnected', participant => {
         console.log(`A remote Participant connected: ${participant}`);
+        inner_loader.setAttribute('style', 'display: none;');
     });
     }, error => {
         console.error(`Unable to connect to Room: ${error.message}`);
