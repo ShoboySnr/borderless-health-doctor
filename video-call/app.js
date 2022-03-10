@@ -141,6 +141,8 @@ window.addEventListener('DOMContentLoaded', () => {
     joinButton.addEventListener("click", async (event) => {
         $('#triggerVideoModal').modal({
             fadeDuration: 350,
+            escapeClose: false,
+            clickClose: false,
             showClose: false
         });
         await joinRoom();
