@@ -1,9 +1,14 @@
-function joinRoom() {
+async function joinRoom() {
+    const inner_loader = document.getElementById('#triggerVideoModal').querySelector('.inner-loader-class');
+
+    //load screen
+    inner_loader.setAttribute('style', 'display: flex;');
+
     auth.onAuthStateChanged((user) => {
         if(user) {
             const roomName = user.displayName ?  `${user.displayName}'s Room` : `${user.email}'s Room`;
             
-            auth.currentUser.getIdToken(true).then((idToken) => {
+            await auth.currentUser.getIdToken(true).then((idToken) => {
 
                 const data = {
                     "room": "test-room",
@@ -21,7 +26,10 @@ function joinRoom() {
 
                         console.log(identity, token);
 
-                        connectVideo(token, roomName, event);
+                        await connectVideo(token, roomName, event);
+
+                        inner_loader.setAttribute('style', 'display: none;');
+
                     }
                 }
 
@@ -30,6 +38,8 @@ function joinRoom() {
         }).catch(function(error) {
             // Handle error
             console.error(`Error: ${error}`);
+            document.getElementById('#local-media-container').innerHTML = `There was an error loading the vide: Error: ${error.message}`;
+            inner_loader.setAttribute('style', 'display: none;');
         });
             
         } else {
@@ -131,9 +141,27 @@ window.addEventListener('DOMContentLoaded', () => {
     const joinButton = document.getElementById("join-button");
     
     joinButton.addEventListener("click", async (event) => {
-      joinRoom();
+        $('#triggerVideoModal').modal({
+            fadeDuration: 350,
+            showClose: false
+        });
+        joinRoom();
     });
 
+
+    if(document.querySelector('#triggerVideoModal .modal-container')) {
+        document.querySelector('#triggerVideoModal .modal-container').addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        })
+    }
+
+    if(document.getElementById('triggerVideoModal')) {
+        document.getElementById('triggerVideoModal').addEventListener('click', (event) => {
+            $.modal.close();
+        })
+    }
     // const leaveButton = document.getElementById("leave-button");
     // leaveButton.addEventListener("click", onLeaveButtonClick);
 })
