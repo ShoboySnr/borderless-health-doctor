@@ -193,11 +193,6 @@ const onParticipantDisconnected = (participant) => {
     participantDiv.parentNode.removeChild(participantDiv);
 };
 
-
-function onParticipantDisconnected(participant) {
-    document.getElementById(participant.sid)?.remove();
-}
-
 const onParticipantConnected = (participant) => {
     const participantDiv = document.createElement("div");
     participantDiv.id = participant.sid;
