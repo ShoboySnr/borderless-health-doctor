@@ -221,7 +221,7 @@ const onParticipantConnected = (participant) => {
       }
     });
   
-    document.body.appendChild(participantDiv);
+    document.getElementById('local-media-container').appendChild(participantDiv);
   
     const trackUnsubscribed = (track) => {
       track.detach().forEach((element) => element.remove());
