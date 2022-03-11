@@ -60,6 +60,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
     const localMediaContainer = document.getElementById("local-media-container");
     inner_loader.setAttribute('style', 'display: none;');
     localTracks.forEach((localTrack) => {
+        console.log(localTrack);
         localMediaContainer.appendChild(localTrack.attach());
     });
 
