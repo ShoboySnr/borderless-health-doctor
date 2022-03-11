@@ -97,16 +97,17 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     videoButton.addEventListener('click', (event) => {
         let element = event.target;
-        if(element.classList.contains('bh-video-disabled')) {
+        const videoButtonEl = document.querySelector('#local-media-container #video-button');
+        if(videoButtonEl.classList.contains('bh-video-disabled')) {
             room.localParticipant.videoTracks.forEach(publication => {
                 publication.track.enable();
             });
-            element.classList.remove('bh-video-disabled');
+            videoButtonEl.classList.remove('bh-video-disabled');
         } else {
             room.localParticipant.videoTracks.forEach(publication => {
                 publication.track.disable();
             });
-            element.classList.add('bh-video-disabled');
+            videoButtonEl.classList.add('bh-video-disabled');
         }
     });
 
@@ -118,16 +119,17 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     muteButton.addEventListener('click', (event) => {
         let element = event.target;
-        if(element.classList.contains('bh-video-disabled')) {
+        const muteButtonEl = document.querySelector('#local-media-container #mute-button');
+        if(muteButtonEl.classList.contains('bh-video-disabled')) {
             room.localParticipant.audioTracks.forEach(publication => {
                 publication.track.enable();
             });
-            element.classList.remove('bh-video-disabled');
+            muteButtonEl.classList.remove('bh-video-disabled');
         } else {
             room.localParticipant.audioTracks.forEach(publication => {
                 publication.track.disable();
             });
-            element.classList.add('bh-video-disabled');
+            muteButtonEl.classList.add('bh-video-disabled');
         }
     });
 
@@ -138,6 +140,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     cancelButton.addEventListener('click', (event) => {
         let element = event.target;
+        const leaveButtonEl = document.querySelector('#local-media-container #leave-button');
         room.on('disconnected', room => {
             // Detach the local media elements
             room.localParticipant.tracks.forEach(publication => {
