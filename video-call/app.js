@@ -150,6 +150,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
     cancelButton.addEventListener('click', (event) => {
         let element = event.target;
         room.on('disconnected', room => {
+            console.log(room);
             // Detach the local media elements
             room.localParticipant.tracks.forEach(publication => {
                 const attachedElements = publication.track.detach();
