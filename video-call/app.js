@@ -47,11 +47,13 @@ async function joinRoom() {
 }
 
 async function connectVideo(token, roomName, inner_loader, event) {
+    const { connect } = twilioVideo;
+
     const localTracks = await twilioVideo.createLocalTracks({
         audio: true,
-        video: { width: 640 },
+        video: { width: 200 },
     });
-    const { connect } = twilioVideo;
+
 
     const room = await connect(`${token}`, { name: roomName, tracks: localTracks }).then(room => {
         console.log(`Successfully joined a Room: ${room}`);
@@ -70,7 +72,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     //append video, mute and cancel buttons
     let divElement = document.createElement('div');
-    divElement.className += 'bh-video-button-group';
+    divElement.className = 'bh-video-button-group';
 
     let videoButton = document.createElement('button');
     videoButton.className = 'bh-video-call-button bh-primary-button';
@@ -144,11 +146,27 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     room.on("participantDisconnected", onParticipantDisconnected);
 
+    room.participants.forEach(participant => {
+        participant.tracks.forEach(publication => {
+            if (publication.isSubscribed) {
+              handleTrackDisabled(publication.track);
+            }
+            publication.on('subscribed', handleTrackDisabled);
+        });
+        publication.on('subscribed', handleTrackDisabled);
+    })
+
     toggleButtons();
 
     event.preventDefault(); 
 }
 
+function handleTrackDisabled(track) {
+    track.on('disabled', () => {
+        /* Hide the associated <video> element and show an avatar image. */
+        alert('hello');
+      });
+}
 
 // when a participant disconnects, remove their video and audio from the DOM.
 const onParticipantDisconnected = (participant) => {
