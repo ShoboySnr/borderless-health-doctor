@@ -198,6 +198,9 @@ function handleTrackDisabled(track) {
         console.log(event);
       /* Hide the associated <video> element and show an avatar image. */
     });
+    track.on('enabled', () => {
+        /* Hide the avatar image and show the associated <video> element. */
+      });
   }
 
 const onParticipantDisconnected = (participant) => {
