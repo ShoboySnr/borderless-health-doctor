@@ -73,7 +73,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
     divElement.className += 'bh-video-button-group';
 
     let videoButton = document.createElement('button');
-    videoButton.className = 'bh-primary-button';
+    videoButton.className = 'bh-video-call-button bh-primary-button';
     videoButton.id = 'video-button';
     videoButton.innerHTML = '<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26.766 10.5184C26.766 8.88921 25.4411 7.56433 23.812 7.56433H6.08781C4.45867 7.56433 3.13379 8.88921 3.13379 10.5184V25.2885C3.13379 26.9176 4.45867 28.2425 6.08781 28.2425H23.812C25.4411 28.2425 26.766 26.9176 26.766 25.2885V20.3656L32.674 25.2885V10.5184L26.766 15.4412V10.5184ZM23.8149 25.2885H6.08781V10.5184H23.812L23.8134 17.9019L23.812 17.9034L23.8134 17.9049L23.8149 25.2885V25.2885Z" fill="#0089E5"/></svg>';
 
