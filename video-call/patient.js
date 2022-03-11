@@ -149,7 +149,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
             });
 
             const notice = document.getElementById('bh-video-notification');
-            notice.setAttribute('style', 'display:block;')
+            notice.setAttribute('style', 'display:flex;')
             notice.innerHTML = '<p>Participant left</p>';
             $.modal.close();
         });
@@ -200,7 +200,7 @@ function handleTrackDisabled(track) {
     track.on('enabled', () => {
         const notice = document.getElementById('bh-video-notification');
         notice.innerHTML = '<p>Participant is unmuted</p>';
-        notice.setAttribute('style', 'display:block;')
+        notice.setAttribute('style', 'display:flex;')
         console.log(event);
         /* Hide the avatar image and show the associated <video> element. */
         document.querySelector('local-media-container video').setAttribute('style', 'display:block;')
