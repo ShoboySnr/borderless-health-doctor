@@ -1,3 +1,7 @@
+const { connect, createLocalTracks, RemoteAudioTrack, RemoteParticipant, RemoteTrack,  RemoteVideoTrack, Room } = twilioVideo;
+let isAudioMuted = false;
+let isVideoMuted = false;
+
 async function joinRoom() {
     const inner_loader = document.getElementById('triggerVideoModal').querySelector('.inner-loader-class');
 
@@ -17,7 +21,7 @@ async function joinRoom() {
             
                 let request = cbrRequest('/token', 'POST', true, idToken);
 
-                request.onload = async (response) => {
+                request.onload = async () => {
                     let data = JSON.parse(request.response);
 
                     if (request.status >= 200 && request.status < 400) {
@@ -46,22 +50,32 @@ async function joinRoom() {
     });
 }
 
-async function connectVideo(token, roomName, inner_loader, event) {
-    const { connect } = twilioVideo;
+function manageTracksForRemoteParticipant(participant) {
+    // Handle tracks that this participant has already published.
+    attachAttachableTracksForRemoteParticipant(participant);
 
-    const localTracks = await twilioVideo.createLocalTracks({
+    // Handles tracks that this participant eventually publishes.
+    participant.on('trackSubscribed', onTrackSubscribed);
+    participant.on('trackUnsubscribed', onTrackUnsubscribed);
+}
+
+function attachAttachableTracksForRemoteParticipant(participant) {
+    participant.tracks.forEach(publication => {
+        if (!publication.isSubscribed)
+            return;
+
+        if (!trackExistsAndIsAttachable(publication.track))
+            return;
+
+        attachTrack(publication.track);
+    });
+}
+
+async function connectVideo(token, roomName, inner_loader, event) {
+
+    const localTracks = await createLocalTracks({
         audio: true,
         video: { width: 200 },
-    });
-
-
-    const room = await connect(`${token}`, { name: roomName, tracks: localTracks }).then(room => {
-        console.log(`Successfully joined a Room: ${room}`);
-        room.on('participantConnected', participant => {
-        console.log(`A remote Participant connected: ${participant}`);
-    });
-    }, error => {
-        console.error(`Unable to connect to Room: ${error.message}`);
     });
 
     const localMediaContainer = document.getElementById("local-media-container");
@@ -70,7 +84,21 @@ async function connectVideo(token, roomName, inner_loader, event) {
         localMediaContainer.appendChild(localTrack.attach());
     });
 
-    console.log(room);
+
+    // const room = await connect(`${token}`, { name: roomName, audio: true, video: {width: 200 }, tracks: localTracks }).then(room => {
+    //     console.log(`Successfully joined a Room: ${room}`);
+    //     room.on('participantConnected', participant => {
+    //     console.log(`A remote Participant connected: ${participant}`);
+    // });
+    // }, error => {
+    //     console.error(`Unable to connect to Room: ${error.message}`);
+    // });
+
+    const room = await connect(`${token}`, { name: roomName, audio: true, video: {width: 200 }, tracks: localTracks });
+
+    room.participants.forEach(participant => {
+        manageTracksForRemoteParticipant(participant)
+    })
 
     //append message notification
     let messageElement = document.createElement('div');
@@ -155,20 +183,45 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     room.on("participantDisconnected", onParticipantDisconnected);
 
-    room.participants.forEach(participant => {
-        participant.tracks.forEach(publication => {
-            if (publication.isSubscribed) {
-              handleTrackDisabled(publication.track);
-            }
-            publication.on('subscribed', handleTrackDisabled);
-        });
-        publication.on('subscribed', handleTrackDisabled);
-    })
-
     toggleButtons();
 
-    event.preventDefault(); 
+    event.preventDefault();
 }
+
+const onParticipantDisconnected = (participant) => {
+    const participantDiv = document.getElementById(participant.sid);
+    participantDiv.parentNode.removeChild(participantDiv);
+};
+
+
+function onParticipantDisconnected(participant) {
+    document.getElementById(participant.sid)?.remove();
+}
+
+const onParticipantConnected = (participant) => {
+    const participantDiv = document.createElement("div");
+    participantDiv.id = participant.sid;
+  
+    // when a remote participant joins, add their audio and video to the DOM
+    const trackSubscribed = (track) => {
+      participantDiv.appendChild(track.attach());
+    };
+    participant.on("trackSubscribed", trackSubscribed);
+  
+    participant.tracks.forEach((publication) => {
+      if (publication.isSubscribed) {
+        trackSubscribed(publication.track);
+      }
+    });
+  
+    document.body.appendChild(participantDiv);
+  
+    const trackUnsubscribed = (track) => {
+      track.detach().forEach((element) => element.remove());
+    };
+  
+    participant.on("trackUnsubscribed", trackUnsubscribed);
+};
 
 function handleTrackDisabled(track) {
     track.on('disabled', () => {
@@ -176,37 +229,6 @@ function handleTrackDisabled(track) {
         alert('hello');
       });
 }
-
-// when a participant disconnects, remove their video and audio from the DOM.
-const onParticipantDisconnected = (participant) => {
-  const participantDiv = document.getElementById(participant.sid);
-  participantDiv.parentNode.removeChild(participantDiv);
-};
-
-const onParticipantConnected = (participant) => {
-  const participantDiv = document.createElement("div");
-  participantDiv.id = participant.sid;
-
-  // when a remote participant joins, add their audio and video to the DOM
-  const trackSubscribed = (track) => {
-    participantDiv.appendChild(track.attach());
-  };
-  participant.on("trackSubscribed", trackSubscribed);
-
-  participant.tracks.forEach((publication) => {
-    if (publication.isSubscribed) {
-      trackSubscribed(publication.track);
-    }
-  });
-
-  document.body.appendChild(participantDiv);
-
-  const trackUnsubscribed = (track) => {
-    track.detach().forEach((element) => element.remove());
-  };
-
-  participant.on("trackUnsubscribed", trackUnsubscribed);
-};
 
 const onLeaveButtonClick = (event) => {
   room.localParticipant.tracks.forEach((publication) => {
