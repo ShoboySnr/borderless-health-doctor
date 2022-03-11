@@ -165,6 +165,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
             handleTrackDisabled(publication.track);
           }
           publication.on('subscribed', handleTrackDisabled);
+          publication.on('unsubscribed', handleTrackDisabled);
         });
       });
 
@@ -179,6 +180,7 @@ function handleTrackDisabled(track) {
         const notice = document.getElementById('bh-video-notification');
         notice.innerHTML = '<p>Participant is muted</p>';
         console.log(event);
+
       /* Hide the associated <video> element and show an avatar image. */
     });
     track.on('enabled', () => {
