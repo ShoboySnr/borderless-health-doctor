@@ -119,13 +119,13 @@ async function connectVideo(token, roomName, inner_loader, event) {
     videoButton.addEventListener('click', (event) => {
         let element = event.target;
         if(element.classList.contains('bh-video-disabled')) {
-            room.localParticipant.videoTracks.forEach(track => {
-                track.enable();
+            room.localParticipant.videoTracks.forEach(publication => {
+                publication.track.enable();
             });
             element.classList.remove('bh-video-disabled');
         } else {
             room.localParticipant.videoTracks.forEach(track => {
-                track.disable();
+                publication.track.disable();
             });
             element.classList.add('bh-video-disabled');
         }
@@ -140,13 +140,13 @@ async function connectVideo(token, roomName, inner_loader, event) {
     muteButton.addEventListener('click', (event) => {
         let element = event.target;
         if(element.classList.contains('bh-video-disabled')) {
-            room.localParticipant.audioTracks.forEach(track => {
-                track.enable();
+            room.localParticipant.audioTracks.forEach(publication => {
+                publication.track.enable();
             });
             element.classList.remove('bh-video-disabled');
         } else {
-            room.localParticipant.audioTracks.forEach(track => {
-                track.disable();
+            room.localParticipant.audioTracks.forEach(publication => {
+                publication.track.disable();
             });
             element.classList.add('bh-video-disabled');
         }
