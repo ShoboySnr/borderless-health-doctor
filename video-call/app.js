@@ -59,10 +59,15 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     const localMediaContainer = document.getElementById("local-media-container");
     inner_loader.setAttribute('style', 'display: none;');
+
+    const currentUserElement = document.createElement('div');
+    currentUserElement.id = 'bh-doctor-video-page';
     localTracks.forEach((localTrack) => {
         console.log(localTrack);
-        localMediaContainer.appendChild(localTrack.attach());
+        currentUserElement.appendChild(localTrack.attach());
     });
+
+    localMediaContainer.appendChild(currentUserElement)
 
     //append image tag
     let imgElement = document.createElement('img');
@@ -174,8 +179,6 @@ async function connectVideo(token, roomName, inner_loader, event) {
         });
       });
 
-    toggleButtons();
-
     event.preventDefault();
 }
 
@@ -240,13 +243,6 @@ const onLeaveButtonClick = (event) => {
     elements.forEach((element) => element.remove());
   });
   room.disconnect();
-
-  toggleButtons();
-};
-
-const toggleButtons = () => {
-  document.getElementById("leave-button").classList.toggle("hidden");
-  document.getElementById("join-button").classList.toggle("hidden");
 };
 
 
