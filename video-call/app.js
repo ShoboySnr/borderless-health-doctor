@@ -70,6 +70,8 @@ async function connectVideo(token, roomName, inner_loader, event) {
         localMediaContainer.appendChild(localTrack.attach());
     });
 
+    console.log(room);
+
     //append message notification
     let messageElement = document.createElement('div');
     messageElement.className = 'bh-video-notification';
