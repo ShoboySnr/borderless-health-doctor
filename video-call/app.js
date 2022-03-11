@@ -188,6 +188,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
 }
 
 function handleTrackDisabled(track) {
+    console.log(track);
     track.on('disabled', (event) => {
         const notice = document.getElementById('bh-video-notification');
         notice.innerHTML = '<p>Participant is muted</p>';
