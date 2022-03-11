@@ -69,6 +69,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
     imgElement.src = 'https://www.kindpng.com/picc/m/207-2074624_white-gray-circle-avatar-png-transparent-png.png';
     imgElement.width = 200;
     imgElement.height = 130;
+    imgElement.id = 'bh-doctor-avatar';
     imgElement.style.display = 'none';
 
     localMediaContainer.append(imgElement);
@@ -133,13 +134,17 @@ async function connectVideo(token, roomName, inner_loader, event) {
     cancelButton.addEventListener('click', (event) => {
         let element = event.target;
         room.on('disconnected', room => {
-            console.log(room);
             // Detach the local media elements
             room.localParticipant.tracks.forEach(publication => {
                 const attachedElements = publication.track.detach();
                 attachedElements.forEach(element => element.remove());
             });
+
+            const notice = document.getElementById('bh-video-notification');
+            notice.innerHTML = '<p>You left</p>';
+            $.modal.close();
         });
+        room.disconnect();
     })
 
     divElement.appendChild(videoButton);
@@ -180,11 +185,17 @@ function handleTrackDisabled(track) {
         const notice = document.getElementById('bh-video-notification');
         notice.innerHTML = '<p>Participant is muted</p>';
         console.log(event);
-
+        document.querySelector('local-media-container video').setAttribute('style', 'display:none;')
+        document.querySelector('img#bh-doctor-avatar').setAttribute('style', 'display:block;')
       /* Hide the associated <video> element and show an avatar image. */
     });
     track.on('enabled', () => {
+        const notice = document.getElementById('bh-video-notification');
+        notice.innerHTML = '<p>Participant is unmuted</p>';
+        console.log(event);
         /* Hide the avatar image and show the associated <video> element. */
+        document.querySelector('local-media-container video').setAttribute('style', 'display:block;')
+        document.querySelector('img#bh-doctor-avatar').setAttribute('style', 'display:none;')
     });
 }
 
