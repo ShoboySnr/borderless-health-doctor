@@ -216,7 +216,8 @@ const onParticipantDisconnected = (participant) => {
 
 const onParticipantConnected = (participant) => {
     const participantDiv = document.createElement("div");
-    participantDiv.id = participant.sid;
+    // participantDiv.id = participant.sid;
+    participantDiv.id = 'bh-doctor-video-page';
   
     // when a remote participant joins, add their audio and video to the DOM
     const trackSubscribed = (track) => {
