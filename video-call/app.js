@@ -267,19 +267,19 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    if(document.querySelector('#triggerVideoModal .modal-container')) {
-        document.querySelector('#triggerVideoModal .modal-container').addEventListener('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            return;
-        })
-    }
+    // if(document.querySelector('#triggerVideoModal .modal-container')) {
+    //     document.querySelector('#triggerVideoModal .modal-container').addEventListener('click', (event) => {
+    //         event.preventDefault();
+    //         event.stopPropagation();
+    //         return;
+    //     })
+    // }
 
-    if(document.getElementById('triggerVideoModal')) {
-        document.getElementById('triggerVideoModal').addEventListener('click', (event) => {
-            $.modal.close();
-        })
-    }
+    // if(document.getElementById('triggerVideoModal')) {
+    //     document.getElementById('triggerVideoModal').addEventListener('click', (event) => {
+    //         $.modal.close();
+    //     })
+    // }
     // const leaveButton = document.getElementById("leave-button");
     // leaveButton.addEventListener("click", onLeaveButtonClick);
 })
