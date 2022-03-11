@@ -70,6 +70,13 @@ async function connectVideo(token, roomName, inner_loader, event) {
         localMediaContainer.appendChild(localTrack.attach());
     });
 
+    //append message notification
+    let messageElement = document.createElement('div');
+    messageElement.className = 'bh-video-notification';
+    messageElement.id = 'bh-video-notification';
+
+    localMediaContainer.appendChild(messageElement);
+
     //append video, mute and cancel buttons
     let divElement = document.createElement('div');
     divElement.className = 'bh-video-button-group';
@@ -103,7 +110,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
     muteButton.addEventListener('click', (event) => {
         let element = event.target;
         if(element.classList.contains('bh-video-disabled')) {
-            room.participant.audioTracks.forEach(track => {
+            room.localParticipant.audioTracks.forEach(track => {
                 track.enable();
             });
             element.classList.remove('bh-video-disabled');
