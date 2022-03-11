@@ -64,6 +64,15 @@ async function connectVideo(token, roomName, inner_loader, event) {
         localMediaContainer.appendChild(localTrack.attach());
     });
 
+    //append image tag
+    let imgElement = document.createElement('img');
+    imgElement.src = 'https://www.kindpng.com/picc/m/207-2074624_white-gray-circle-avatar-png-transparent-png.png';
+    imgElement.width = 200;
+    imgElement.height = 130;
+    imgElement.style.display = 'none';
+
+    localMediaContainer.append(imgElement);
+
         //append message notification
     let messageElement = document.createElement('div');
     messageElement.className = 'bh-video-notification';
