@@ -183,10 +183,11 @@ function handleTrackDisabled(track) {
     });
     track.on('enabled', () => {
         /* Hide the avatar image and show the associated <video> element. */
-      });
-  }
+    });
+}
 
 const onParticipantDisconnected = (participant) => {
+    console.log(participant);
     const participantDiv = document.getElementById(participant.sid);
     participantDiv.parentNode.removeChild(participantDiv);
 };
@@ -215,13 +216,6 @@ const onParticipantConnected = (participant) => {
   
     participant.on("trackUnsubscribed", trackUnsubscribed);
 };
-
-function handleTrackDisabled(track) {
-    track.on('disabled', () => {
-        /* Hide the associated <video> element and show an avatar image. */
-        alert('hello');
-      });
-}
 
 const onLeaveButtonClick = (event) => {
   room.localParticipant.tracks.forEach((publication) => {
