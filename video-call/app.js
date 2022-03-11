@@ -108,6 +108,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     videoButton.addEventListener('click', (event) => {
         let element = event.target;
+        if( element !== this) return
         if(element.classList.contains('bh-video-disabled')) {
             room.localParticipant.videoTracks.forEach(publication => {
                 publication.track.enable();
@@ -129,6 +130,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     muteButton.addEventListener('click', (event) => {
         let element = event.target;
+        if( element !== this) return
         if(element.classList.contains('bh-video-disabled')) {
             room.localParticipant.audioTracks.forEach(publication => {
                 publication.track.enable();
@@ -149,6 +151,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     cancelButton.addEventListener('click', (event) => {
         let element = event.target;
+        if( element !== this) return
         room.on('disconnected', room => {
             // Detach the local media elements
             room.localParticipant.tracks.forEach(publication => {
@@ -179,6 +182,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
             handleTrackDisabled(publication.track);
           }
           publication.on('subscribed', handleTrackDisabled);
+          publication.on('unsubscribed', handleTrackDisabled);
         });
       });
 
