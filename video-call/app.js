@@ -84,16 +84,6 @@ async function connectVideo(token, roomName, inner_loader, event) {
         localMediaContainer.appendChild(localTrack.attach());
     });
 
-
-    // const room = await connect(`${token}`, { name: roomName, audio: true, video: {width: 200 }, tracks: localTracks }).then(room => {
-    //     console.log(`Successfully joined a Room: ${room}`);
-    //     room.on('participantConnected', participant => {
-    //     console.log(`A remote Participant connected: ${participant}`);
-    // });
-    // }, error => {
-    //     console.error(`Unable to connect to Room: ${error.message}`);
-    // });
-
     const room = await connect(`${token}`, { name: roomName, audio: true, video: {width: 200 }, tracks: localTracks });
 
     room.participants.forEach(participant => {
@@ -124,7 +114,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
             });
             element.classList.remove('bh-video-disabled');
         } else {
-            room.localParticipant.videoTracks.forEach(track => {
+            room.localParticipant.videoTracks.forEach(publication => {
                 publication.track.disable();
             });
             element.classList.add('bh-video-disabled');
@@ -183,10 +173,28 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     room.on("participantDisconnected", onParticipantDisconnected);
 
+    room.participants.forEach(participant => {
+        participant.tracks.forEach(publication => {
+          if (publication.isSubscribed) {
+            handleTrackDisabled(publication.track);
+          }
+          publication.on('subscribed', handleTrackDisabled);
+        });
+      });
+
     toggleButtons();
 
     event.preventDefault();
 }
+
+function handleTrackDisabled(track) {
+    track.on('disabled', (event) => {
+        const notice = document.getElementById('bh-video-notification');
+        notice.innerHTML = '<p>Participant is muted</p>';
+        console.log(event);
+      /* Hide the associated <video> element and show an avatar image. */
+    });
+  }
 
 const onParticipantDisconnected = (participant) => {
     const participantDiv = document.getElementById(participant.sid);
