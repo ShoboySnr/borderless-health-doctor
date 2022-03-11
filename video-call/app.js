@@ -50,27 +50,6 @@ async function joinRoom() {
     });
 }
 
-function manageTracksForRemoteParticipant(participant) {
-    // Handle tracks that this participant has already published.
-    attachAttachableTracksForRemoteParticipant(participant);
-
-    // Handles tracks that this participant eventually publishes.
-    participant.on('trackSubscribed', onTrackSubscribed);
-    participant.on('trackUnsubscribed', onTrackUnsubscribed);
-}
-
-function attachAttachableTracksForRemoteParticipant(participant) {
-    participant.tracks.forEach(publication => {
-        if (!publication.isSubscribed)
-            return;
-
-        if (!trackExistsAndIsAttachable(publication.track))
-            return;
-
-        attachTrack(publication.track);
-    });
-}
-
 async function connectVideo(token, roomName, inner_loader, event) {
 
     const localTracks = await createLocalTracks({
@@ -84,13 +63,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
         localMediaContainer.appendChild(localTrack.attach());
     });
 
-    const room = await connect(`${token}`, { name: roomName, audio: true, video: {width: 200 }, tracks: localTracks });
-
-    room.participants.forEach(participant => {
-        manageTracksForRemoteParticipant(participant)
-    })
-
-    //append message notification
+        //append message notification
     let messageElement = document.createElement('div');
     messageElement.className = 'bh-video-notification';
     messageElement.id = 'bh-video-notification';
@@ -165,6 +138,8 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
 
     localMediaContainer.appendChild(divElement);
+
+    const room = await connect(`${token}`, { name: roomName, audio: true, video: {width: 200 }, tracks: localTracks });
 
     // display video/audio of other participants who have already joined
     room.participants.forEach(onParticipantConnected);
