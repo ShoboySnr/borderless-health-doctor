@@ -182,7 +182,6 @@ async function connectVideo(token, roomName, inner_loader, event) {
             handleTrackDisabled(publication.track);
           }
           publication.on('subscribed', handleTrackDisabled);
-          publication.on('unsubscribed', handleTrackDisabled);
         });
       });
 
