@@ -162,7 +162,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     localMediaContainer.appendChild(divElement);
 
-    const room = await connect(`${token}`, { name: roomName, audio: true, video: {width: 200 }, tracks: localTracks });
+    const room = await connect(`${token}`, { name: roomName, audio: true, video: {width: 500 }, tracks: localTracks });
 
     // display video/audio of other participants who have already joined
     room.participants.forEach(onParticipantConnected);
