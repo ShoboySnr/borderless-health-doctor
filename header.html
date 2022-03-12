@@ -65,7 +65,7 @@
     max-width: 45vw;
 }
 
-#triggerVideoModal .bh-patient-connected video, #triggerVideoModal .bh-patient-connected img {
+#triggerVideoModal .bh-participants-video video, #triggerVideoModal .bh-participants-video img {
     height: 100%;
     width: 100%;
     object-fit: cover;
@@ -75,17 +75,7 @@
     right: 0;
 }
 
-#triggerVideoModal video:nth-of-type(2n), #triggerVideoModal img:nth-of-type(2n) {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    object-position: center;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}
-
-#triggerVideoModal video:nth-of-type(2n+1), #triggerVideoModal img:nth-of-type(2n+1) {
+#triggerVideoModal video, #triggerVideoModal img {
     height: 130px;
     width: 200px;
     object-fit: cover;
@@ -131,12 +121,12 @@
 .bh-video-button-group .bh-video-call-button.bh-video-disabled::after {
     content: "";
     position: absolute;
-    border-top: 2px solid red;
-    width: 50px;
-    top: 15%;
+    border-top: 2px solid #0089E5;
+    top: 20%;
+    width: 80%;
     transform: rotate(135deg);
     transform-origin: 0% 0%;
-    left: 85%;
+    left: 80%;
 }
 
 #bh-video-notification {
