@@ -61,6 +61,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
     inner_loader.setAttribute('style', 'display: none;');
 
     const currentUserElement = document.createElement('div');
+    currentUserElement.className = 'bh-main-video'
     localTracks.forEach((localTrack) => {
         console.log(localTrack);
         currentUserElement.appendChild(localTrack.attach());
