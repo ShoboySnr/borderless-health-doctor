@@ -54,7 +54,7 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     const localTracks = await createLocalTracks({
         audio: true,
-        video: { width: 500 },
+        video: { height: 720, frameRate: 24, width: 1280 },
     });
 
     const localMediaContainer = document.getElementById("local-media-container");
