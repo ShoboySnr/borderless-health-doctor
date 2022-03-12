@@ -61,7 +61,6 @@ async function connectVideo(token, roomName, inner_loader, event) {
     inner_loader.setAttribute('style', 'display: none;');
 
     const currentUserElement = document.createElement('div');
-    currentUserElement.id = 'bh-patient-video-page';
     localTracks.forEach((localTrack) => {
         console.log(localTrack);
         currentUserElement.appendChild(localTrack.attach());
@@ -191,7 +190,7 @@ function handleTrackDisabled(track) {
     track.on('disabled', (event) => {
         const notice = document.getElementById('bh-video-notification');
         notice.innerHTML = '<p>Participant is muted</p>';
-        notice.setAttribute('style', 'display:block;')
+        notice.setAttribute('style', 'display:flex;')
         console.log(event);
         document.querySelector('local-media-container video').setAttribute('style', 'display:none;')
         document.querySelector('img#bh-doctor-avatar').setAttribute('style', 'display:block;')
@@ -216,8 +215,7 @@ const onParticipantDisconnected = (participant) => {
 
 const onParticipantConnected = (participant) => {
     const participantDiv = document.createElement("div");
-    // participantDiv.id = participant.sid;
-    participantDiv.id = 'bh-doctor-video-page';
+    participantDiv.id = participant.sid;
   
     // when a remote participant joins, add their audio and video to the DOM
     const trackSubscribed = (track) => {
