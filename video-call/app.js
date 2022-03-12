@@ -162,7 +162,20 @@ async function connectVideo(token, roomName, inner_loader, event) {
 
     localMediaContainer.appendChild(divElement);
 
-    const room = await connect(`${token}`, { name: roomName, audio: true, video: { width: 500 }, tracks: localTracks });
+    const room = await connect(`${token}`, { name: roomName,
+        audio: true,
+        video: { height: 720, frameRate: 24, width: 1280 },
+        bandwidthProfile: {
+          video: {
+            mode: 'collaboration',
+            dominantSpeakerPriority: 'standard'
+          }
+        },
+        dominantSpeaker: true,
+        maxAudioBitrate: 16000,
+        preferredVideoCodecs: [{ codec: 'VP8', simulcast: true }],
+        networkQuality: {local:1, remote: 1}, 
+        tracks: localTracks });
 
     // display video/audio of other participants who have already joined
     room.participants.forEach(onParticipantConnected);
